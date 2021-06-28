@@ -5,3 +5,4 @@ Cyprfam is a free tool that allows families to keep track of different cryptocur
 
 
 ## Database Schema
+ * https://dbdiagram.io/d/60da4649dd6a597148239046
