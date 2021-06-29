@@ -14,39 +14,39 @@ Cyprfam is a free tool that allows families to keep track of different cryptocur
 This will be the initial page once a user visits the page and is not authenticated. It will be a general spash page with highlights of the app with a detailed navbar. 
 
 
-## Log in page
+## Log in page  [wireframe](https://docs.google.com/drawings/d/106fUFYGusX7bkIhtUZgkp4oC3mbhYvLmTzjJ0tOs1a8/edit?usp=sharing)
 This page displays a log in form if the user is not logged in
 * `GET /users/login`
 * `POST /users/login`
 ## `/user/new`
 This page displays a signup form.
-### Sign up page
+### Sign up page [wireframe](https://docs.google.com/drawings/d/1bs42ETQu7M_LnNeivSX1CP0syoWdFo7Zknz56v4rXZw/edit?usp=sharing)
 * `GET /users/new`
 * `POST /api/users/new`
-## `/`
+## Index `/` (If authenticated) [wireframe](https://docs.google.com/drawings/d/1bs42ETQu7M_LnNeivSX1CP0syoWdFo7Zknz56v4rXZw/edit?usp=sharing)
 This page will render the users account balance and associated accounts. This will act as the "home" page when a user has successfully authenticated. If the user was not invited by a family they will also be promted to enter family information. 
 * `GET /api/user` 
 * `GET /api/family` || `POST /api/family`
 
 
-## `/family/:id`
+## `/family/:id` [wireframe](https://docs.google.com/drawings/d/1bs42ETQu7M_LnNeivSX1CP0syoWdFo7Zknz56v4rXZw/edit?usp=sharing)
 This page display's a list of family accounts and balances. The user can click on associated accounts and users to drill down further. In addition to the navbar and settings tab a series of charts and graphs will display relevant crypto data.
 * `GET /api/family/id`
 
-## `/user/:id`
+## `/user/:id` [wireframe](https://docs.google.com/drawings/d/1bs42ETQu7M_LnNeivSX1CP0syoWdFo7Zknz56v4rXZw/edit?usp=sharing)
 This page display's a list of user accounts and balances. In addition to the navbar this page will also display a list of detailed transactions (regardless of account) 
 
 
-*  ` GET /api/user/:id`
+*  ` GET /api/user/:id` 
 
 
-## `/account/:familyId/:accountName`
+## `/account/:familyId/:accountName` [wireframe](https://docs.google.com/drawings/d/14wgVzEIi2y4W0hTMEvls761VfMdy1t4CngfJw8fY_Z0/edit?usp=sharing)
 
 The user will see the balance and transactional data associated on a per account level on this page. So, for example, if a user wanted to see data from all Coinbase accounts, they would navigate here. The user can also filter by a family member to drill down by user.
 
 *  `GET /api/account/:familyId/:accountName`
 
-## `/settings/:userId`
+## `/settings/:userId` [wireframe](https://docs.google.com/drawings/d/10LdqluOp0hf4u4RfTFC0N5vD8oMM-MkrH4W8XVG37eo/edit?usp=sharing)
 Here a user will be able to make changes to their account. The following changes are as follows:
 
 ### If head of household:
