@@ -7,7 +7,7 @@ Cyprfam is a free tool that allows families to keep track of different cryptocur
 ## Database Schema
  * https://dbdiagram.io/d/60da4649dd6a597148239046
 
-# User-facing routes
+# User and API Routes
 
 ## `/`
 
@@ -65,3 +65,29 @@ Here a user will be able to make changes to their account. The following changes
  * Edit user visibility settings `PATCH /api/visibility/user/:id`
 
  
+ # MVP Feature List
+
+* Families
+    * Create a new family with a head of household (user)
+    * Delete a family
+    * Allow head of household to move to a different family
+    * Add a new user to the family
+* User 
+    * Allow a user to connect to their different crypto wallets via zabo
+    * Allow a user to modify what accounts/balances / transactions are visible by other family members (head of households will have global access)
+    * Allow a user to delete their account
+    * Allow a user to move to a new family
+* Accounts 
+    * Allow for the head of the household to view all family accounts
+    * Allow for family members to see relevant accounts
+* Balances 
+    * Allow for the head of the household to view all family balances
+    * Allow for family members to see relevant balances
+
+* Transactions
+    * Allow for the head of the household to view all family transactions
+    * Allow for family members to see relevant transactions
+
+
+ 
+
