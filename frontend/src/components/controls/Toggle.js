@@ -1,16 +1,31 @@
 import { Switch } from "@headlessui/react";
+import { CheckIcon } from "@heroicons/react/solid";
 import React, { useState } from "react";
 import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
 
-function Toggle() {
+function Toggle({ label, handleClick }) {
   const { addFamilyMembers, setAddFamilyMembers } = useAddFamilyMemberSignUp();
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
   return (
-    <div className="flex flex-row justify-between">
-      <span className="text-gray-700 font">Add Family Members</span>
-      <Switch
+    <div className="flex justify-between">
+      <span className="flex-shrink-0">{label}</span>
+
+      <div className="relative inline-flex items-center">
+        <p className="mr-4">0</p>
+        <button onClick={handleClick}>
+          <CheckIcon className="h-5 w-5" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+export default Toggle;
+
+{
+  /* <Switch
         checked={addFamilyMembers}
         onChange={() => setAddFamilyMembers(!addFamilyMembers)}
         className={classNames(
@@ -26,9 +41,5 @@ function Toggle() {
             "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
           )}
         />
-      </Switch>
-    </div>
-  );
+      </Switch> */
 }
-
-export default Toggle;

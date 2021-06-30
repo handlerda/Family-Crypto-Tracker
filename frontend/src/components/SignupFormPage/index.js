@@ -4,6 +4,11 @@ import { Link, Redirect } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 import Toggle from "../controls/Toggle";
 import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
+import Input from "../controls/Input";
+import FamilyMembers from "./FamilyMembers";
+import Popup from "../controls/Popup";
+import { Dialog } from "@headlessui/react";
+import { CheckIcon } from "@heroicons/react/outline";
 
 function SignupFormPage() {
   const dispatch = useDispatch();
@@ -16,6 +21,7 @@ function SignupFormPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const { addFamilyMembers, setAddFamilyMembers } = useAddFamilyMemberSignUp();
   const [finishedInitialQuestions, setInitialQuestions] = useState(false);
+  const [showPopUp, setShowPopUp] = useState(false);
   const [errors, setErrors] = useState([]);
 
   const inputQuestions = [
@@ -57,11 +63,18 @@ function SignupFormPage() {
     },
   ];
 
+  // will take user to password and additional fam member
   function checkContinue(e) {
     e.preventDefault();
     if (inputQuestions.some((key) => !key.value && key.initial))
       setInitialQuestions(false);
     else setInitialQuestions(true);
+  }
+
+  //call popup
+  function renderPopUp(e) {
+    e.preventDefault();
+    setShowPopUp(true);
   }
 
   if (sessionUser) return <Redirect to="/" />;
@@ -85,6 +98,43 @@ function SignupFormPage() {
   //if(initial)
   return (
     <div className="min-h-screen bg-pink-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
+      {showPopUp && (
+        <Popup open={showPopUp} setOpen={setShowPopUp}>
+          <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+            <div>
+              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                <CheckIcon
+                  className="h-6 w-6 text-green-600"
+                  aria-hidden="true"
+                />
+              </div>
+              <div className="mt-3 text-center sm:mt-5">
+                <Dialog.Title
+                  as="h3"
+                  className="text-lg leading-6 font-medium text-gray-900"
+                >
+                  Payment successful
+                </Dialog.Title>
+                <div className="mt-2">
+                  <p className="text-sm text-gray-500">
+                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                    Consequatur amet labore.
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div className="mt-5 sm:mt-6">
+              <button
+                type="button"
+                className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                // onClick={() => setOpen(false)}
+              >
+                Go back to dashboard
+              </button>
+            </div>
+          </div>
+        </Popup>
+      )}
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
           Crypfam
@@ -102,58 +152,40 @@ function SignupFormPage() {
           </Link>
         </p>
       </div>
-
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-gray-200 py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
             {inputQuestions.map((question) => {
               if (!finishedInitialQuestions && question.initial === true) {
                 return (
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      {question.label}
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        type={question.type}
-                        value={question.value}
-                        onChange={(e) => question.setValue(e.target.value)}
-                        autoComplete="email"
-                        required
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      />
-                    </div>
-                  </div>
+                  <Input
+                    label={question.label}
+                    type={question.type}
+                    value={question.value}
+                    handleChange={(e) => question.setValue(e.target.value)}
+                    css="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                  />
                 );
               }
               if (finishedInitialQuestions && !question.initial) {
                 return (
-                  <div>
-                    <label
-                      htmlFor="email"
-                      className="block text-sm font-medium text-gray-700"
-                    >
-                      {question.label}
-                    </label>
-                    <div className="mt-1">
-                      <input
-                        type={question.type}
-                        value={question.value}
-                        onChange={(e) => question.setValue(e.target.value)}
-                        autoComplete="email"
-                        required
-                        className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      />
-                    </div>
-                  </div>
+                  <Input
+                    label={question.label}
+                    type={question.type}
+                    value={question.value}
+                    handleChange={(e) => question.setValue(e.target.value)}
+                    css="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                  />
                 );
               }
             })}
-            {finishedInitialQuestions && <Toggle />}
-            {addFamilyMembers && <h1>Hello it worked</h1>}
+            {finishedInitialQuestions && <Toggle label="Add a family member" />}
+
+            {addFamilyMembers && finishedInitialQuestions && (
+              <div className=" py-3">
+                <FamilyMembers />
+              </div>
+            )}
             <div className="flex-row flex justify-between">
               {!finishedInitialQuestions && (
                 <button
@@ -171,8 +203,11 @@ function SignupFormPage() {
                   >
                     Back
                   </button>
-                  <button className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500">
-                    Next
+                  <button
+                    className="py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-green-500 hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                    onClick={(e) => renderPopUp(e)}
+                  >
+                    Verify Info
                   </button>
                 </>
               )}
