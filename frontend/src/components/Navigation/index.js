@@ -9,35 +9,7 @@ import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { PlusIcon } from "@heroicons/react/solid";
 import { CogIcon } from "@heroicons/react/solid";
 
-import "./Navigation.css";
-
 function Navigation({ isLoaded }) {
-  // const sessionUser = useSelector(state => state.session.user);
-
-  // let sessionLinks;
-  // // render navbar with loggedin features
-  // if (sessionUser) {
-  //   sessionLinks = (
-  //     <ProfileButton user={sessionUser} />
-  //   );
-  // } else {
-  //   sessionLinks = (
-  //     <>
-  //       <LoginFormModal />
-  //       <NavLink to="/signup">Sign Up</NavLink>
-  //     </>
-  //   );
-  // }
-
-  // return (
-  //   <ul>
-  //     <li>
-  //       <NavLink exact to="/">Home</NavLink>
-  //       {isLoaded && sessionLinks}
-  //     </li>
-  //   </ul>
-  // );
-
   const unauthenticatedNavigation = [
     { name: "What we do", href: "#", current: false },
     { name: "Why crypfam", href: "#", current: false },

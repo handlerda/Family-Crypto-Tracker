@@ -14,10 +14,13 @@ function App() {
 
   return (
     <>
-      <Navigation isLoaded={isLoaded} />
       {isLoaded && (
         <Switch>
-          <Route path="/signup">
+          <Route path="/" exact>
+            <Navigation isLoaded={isLoaded} />
+          </Route>
+          <Route path="/sign-up" exact>
+            <Navigation isLoaded={isLoaded} />
             <SignupFormPage />
           </Route>
         </Switch>

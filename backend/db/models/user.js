@@ -59,6 +59,8 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function (models) {
     // associations can be defined here
     User.belongsTo(models.Family, { foreignKey: "familyId" });
+    // add mixins to add function on join table getAuthorizedAccounts -- etc
+    // https://sequelize.org/master/manual/assocs.html#special-methods-mixins-added-to-instances
     User.belongsToMany(models.Account, {
       through: "AuthorizedAccountUsers",
       otherKey: "accountId",
