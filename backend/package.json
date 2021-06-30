@@ -32,7 +32,10 @@
     "sequelize-cli": "^5.5.1"
   },
   "devDependencies": {
+    "autoprefixer": "^9.8.6",
     "dotenv-cli": "^4.0.0",
-    "nodemon": "^2.0.7"
+    "nodemon": "^2.0.7",
+    "postcss": "^7.0.36",
+    "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.2.4"
   }
 }
