@@ -11,21 +11,7 @@ function Toggle({ label, handleClick }) {
   return (
     <div className="flex justify-between">
       <span className="flex-shrink-0">{label}</span>
-
-      <div className="relative inline-flex items-center">
-        <p className="mr-4">0</p>
-        <button onClick={handleClick}>
-          <CheckIcon className="h-5 w-5" />
-        </button>
-      </div>
-    </div>
-  );
-}
-
-export default Toggle;
-
-{
-  /* <Switch
+      <Switch
         checked={addFamilyMembers}
         onChange={() => setAddFamilyMembers(!addFamilyMembers)}
         className={classNames(
@@ -41,5 +27,9 @@ export default Toggle;
             "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
           )}
         />
-      </Switch> */
+      </Switch>
+    </div>
+  );
 }
+
+export default Toggle;
