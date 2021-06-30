@@ -59,6 +59,12 @@ module.exports = (sequelize, DataTypes) => {
   User.associate = function (models) {
     // associations can be defined here
     User.belongsTo(models.Family, { foreignKey: "familyId" });
+    User.belongsToMany(models.Account, {
+      through: "AuthorizedAccountUsers",
+      otherKey: "accountId",
+      foreignKey: "userId",
+      as: "AuthorizedAccounts",
+    });
   };
 
   User.prototype.toSafeObject = function () {
@@ -86,7 +92,7 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
 
-  User.signup = async function ({ username, email, password }) {
+  User.signup = async function ({ email, password }) {
     const hashedPassword = bcrypt.hashSync(password);
     const user = await User.create({
       email,

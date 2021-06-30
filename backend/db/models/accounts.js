@@ -1,7 +1,7 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const Accounts = sequelize.define(
-    "Accounts",
+  const Account = sequelize.define(
+    "Account",
     {
       zaboId: DataTypes.INTEGER,
       userId: DataTypes.INTEGER,
@@ -9,9 +9,17 @@ module.exports = (sequelize, DataTypes) => {
     },
     {}
   );
-  Accounts.associate = function (models) {
+  Account.associate = function (models) {
     // associations can be defined here
-    Accounts.belongsTo(models.User, { foreignKey: "userId" });
+    Account.belongsTo(models.User, { foreignKey: "userId" });
+    // add mixins to add function on join table getAuthorizedUsers -- etc
+    // https://sequelize.org/master/manual/assocs.html#special-methods-mixins-added-to-instances
+    Account.belongsToMany(models.User, {
+      through: "AuthorizedAccountUsers",
+      foreignKey: "accountId",
+      otherKey: "userId",
+      as: "AuthorizedUsers",
+    });
   };
-  return Accounts;
+  return Account;
 };

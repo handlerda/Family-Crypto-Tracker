@@ -1,7 +1,4 @@
 "use strict";
-
-const { Sequelize } = require("sequelize/types");
-
 module.exports = (sequelize, DataTypes) => {
   const FamilyInviteCode = sequelize.define(
     "FamilyInviteCode",
@@ -22,7 +19,7 @@ module.exports = (sequelize, DataTypes) => {
   );
   FamilyInviteCode.associate = function (models) {
     // associations can be defined here
-    User.belongsTo(models.Family, { foreignKey: "familyId" });
+    FamilyInviteCode.belongsTo(models.Family, { foreignKey: "familyId" });
   };
   return FamilyInviteCode;
 };
