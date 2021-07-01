@@ -96,11 +96,14 @@ function SignupFormPage() {
   //remove family member
   // function removeFamilyMembersForm(e) {
   //   e.preventDefault();
-  //   // get familyMembers
-  //   //const members = familyMembers;
-
-  //   setFamilyMembers([...familyMembers.pop()]);
+  //   console.log(`hi`);
+  //   // get family members
+  //   const members = familyMembers;
+  //   setFamilyMembers({
+  //     ...[members.slice(members.length + 1)],
+  //   });
   // }
+
   console.log(`here are family members`, familyMembers);
   if (sessionUser) return <Redirect to="/" />;
 
@@ -136,25 +139,81 @@ function SignupFormPage() {
               <div className="mt-3 text-center sm:mt-5">
                 <Dialog.Title
                   as="h3"
-                  className="text-lg leading-6 font-medium text-gray-900"
+                  className="text-lg mb-5 leading-6 font-medium text-gray-900"
                 >
-                  Payment successful
+                  Confirm Account Information
                 </Dialog.Title>
-                <div className="mt-2">
-                  <p className="text-sm text-gray-500">
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                    Consequatur amet labore.
-                  </p>
-                </div>
+                {inputQuestions.map((question) => {
+                  return (
+                    <div>
+                      <Input
+                        label={question.label}
+                        type={question.type}
+                        value={question.value}
+                        handleChange={(e) => question.setValue(e.target.value)}
+                        css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      />
+                    </div>
+                  );
+                })}
+                {familyMembers &&
+                  // THIS IS NOT WORKING ISSUE WITH RENDERING / RETURN
+                  familyMembers.map((member) => {
+                    // need to figure out return strat
+                    member.lastName && (
+                      <Input
+                        label="First Name"
+                        type="string"
+                        value={member.firstName}
+                        handleChange={(e) =>
+                          setAdditionalFamilyMember({
+                            ...additionalFamilyMember, // spread the old object to new state
+                            firstName: e.target.value, // update the state with new value
+                          })
+                        }
+                        css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      />
+                    );
+
+                    member.lastName && (
+                      <Input
+                        label="Last Name"
+                        type="string"
+                        value={member.lastName}
+                        handleChange={(e) =>
+                          setAdditionalFamilyMember({
+                            ...additionalFamilyMember, // spread the old object to new state
+                            lastName: e.target.value, // update the state with new value
+                          })
+                        }
+                        css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      />
+                    );
+
+                    member.email && (
+                      <Input
+                        label="Last Name"
+                        type="string"
+                        value={member.email}
+                        handleChange={(e) =>
+                          setAdditionalFamilyMember({
+                            ...additionalFamilyMember, // spread the old object to new state
+                            email: e.target.value, // update the state with new value
+                          })
+                        }
+                        css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                      />
+                    );
+                  })}
               </div>
             </div>
             <div className="mt-5 sm:mt-6">
               <button
                 type="button"
-                className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-500 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
                 // onClick={() => setOpen(false)}
               >
-                Go back to dashboard
+                Sign up
               </button>
             </div>
           </div>
