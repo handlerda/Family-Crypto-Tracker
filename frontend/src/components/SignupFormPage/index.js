@@ -16,7 +16,6 @@ function SignupFormPage() {
   const dispatch = useDispatch();
   const sessionUser = useSelector((state) => state.session.user);
   const [email, setEmail] = useState("");
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -32,6 +31,7 @@ function SignupFormPage() {
   const [finishedInitialQuestions, setInitialQuestions] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [errors, setErrors] = useState([]);
+  const [familyMemberErrors, setFamilyMemberErrors] = useState([]);
 
   const inputQuestions = [
     {
@@ -89,8 +89,15 @@ function SignupFormPage() {
   //handle adding family members
   function addFamilyMembersForm(e) {
     e.preventDefault();
-    setFamilyMembers((prevState) => [...prevState, additionalFamilyMember]);
-    setAdditionalFamilyMember({ firstName: "", lastName: "", email: "" });
+    // only run if the additional family member has a valid email
+    if (!!additionalFamilyMember.email.match(/.+@.+/)) {
+      //clear error state if there were previous errors
+      setFamilyMemberErrors([]);
+      setFamilyMembers((prevState) => [...prevState, additionalFamilyMember]);
+      setAdditionalFamilyMember({ firstName: "", lastName: "", email: "" });
+    } else {
+      setFamilyMemberErrors(["Must be a valid email"]);
+    }
   }
 
   //remove family member
@@ -104,15 +111,23 @@ function SignupFormPage() {
   //   });
   // }
 
-  console.log(`here are family members`, familyMembers);
   if (sessionUser) return <Redirect to="/" />;
-
+  // handle submit
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(`submit process init`);
     if (password === confirmPassword) {
       setErrors([]);
+      // call redux to POST to API
+      // payload that will be sent to the server
       return dispatch(
-        sessionActions.signup({ email, username, password })
+        sessionActions.signup(
+          firstName,
+          lastName,
+          email,
+          password,
+          familyMembers
+        )
       ).catch(async (res) => {
         const data = await res.json();
         if (data && data.errors) setErrors(data.errors);
@@ -126,99 +141,6 @@ function SignupFormPage() {
   console.log(`additionalFamilyMember`, additionalFamilyMember);
   return (
     <div className="min-h-screen bg-pink-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
-      {showPopUp && (
-        <Popup open={showPopUp} setOpen={setShowPopUp}>
-          <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
-            <div>
-              <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
-                <CheckIcon
-                  className="h-6 w-6 text-green-600"
-                  aria-hidden="true"
-                />
-              </div>
-              <div className="mt-3 text-center sm:mt-5">
-                <Dialog.Title
-                  as="h3"
-                  className="text-lg mb-5 leading-6 font-medium text-gray-900"
-                >
-                  Confirm Account Information
-                </Dialog.Title>
-                {inputQuestions.map((question) => {
-                  return (
-                    <div>
-                      <Input
-                        label={question.label}
-                        type={question.type}
-                        value={question.value}
-                        handleChange={(e) => question.setValue(e.target.value)}
-                        css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      />
-                    </div>
-                  );
-                })}
-                {familyMembers &&
-                  // THIS IS NOT WORKING ISSUE WITH RENDERING / RETURN
-                  familyMembers.map((member) => {
-                    // need to figure out return strat
-                    member.lastName && (
-                      <Input
-                        label="First Name"
-                        type="string"
-                        value={member.firstName}
-                        handleChange={(e) =>
-                          setAdditionalFamilyMember({
-                            ...additionalFamilyMember, // spread the old object to new state
-                            firstName: e.target.value, // update the state with new value
-                          })
-                        }
-                        css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      />
-                    );
-
-                    member.lastName && (
-                      <Input
-                        label="Last Name"
-                        type="string"
-                        value={member.lastName}
-                        handleChange={(e) =>
-                          setAdditionalFamilyMember({
-                            ...additionalFamilyMember, // spread the old object to new state
-                            lastName: e.target.value, // update the state with new value
-                          })
-                        }
-                        css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      />
-                    );
-
-                    member.email && (
-                      <Input
-                        label="Last Name"
-                        type="string"
-                        value={member.email}
-                        handleChange={(e) =>
-                          setAdditionalFamilyMember({
-                            ...additionalFamilyMember, // spread the old object to new state
-                            email: e.target.value, // update the state with new value
-                          })
-                        }
-                        css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                      />
-                    );
-                  })}
-              </div>
-            </div>
-            <div className="mt-5 sm:mt-6">
-              <button
-                type="button"
-                className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-500 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
-                // onClick={() => setOpen(false)}
-              >
-                Sign up
-              </button>
-            </div>
-          </div>
-        </Popup>
-      )}
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <h2 className="mt-6 text-center text-3xl font-extrabold text-white">
           Crypfam
@@ -239,6 +161,107 @@ function SignupFormPage() {
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-gray-200 py-8 px-4 shadow sm:rounded-lg sm:px-10">
           <form className="space-y-6" onSubmit={handleSubmit}>
+            {showPopUp && (
+              <Popup open={showPopUp} setOpen={setShowPopUp}>
+                <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                  <div>
+                    <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
+                      <CheckIcon
+                        className="h-6 w-6 text-green-600"
+                        aria-hidden="true"
+                      />
+                    </div>
+                    <div className="mt-3 text-center sm:mt-5">
+                      <Dialog.Title
+                        as="h3"
+                        className="text-lg mb-5 leading-6 font-medium text-gray-900"
+                      >
+                        Confirm Account Information
+                      </Dialog.Title>
+                      {inputQuestions.map((question) => {
+                        return (
+                          <div>
+                            <Input
+                              label={question.label}
+                              type={question.type}
+                              value={question.value}
+                              handleChange={(e) =>
+                                question.setValue(e.target.value)
+                              }
+                              css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                            />
+                          </div>
+                        );
+                      })}
+                      {familyMembers &&
+                        // THIS IS NOT WORKING ISSUE WITH RENDERING / RETURN
+                        familyMembers.map((member) => {
+                          // need to figure out return strat
+                          member.lastName && (
+                            <Input
+                              label="First Name"
+                              type="string"
+                              value={member.firstName}
+                              handleChange={(e) =>
+                                setAdditionalFamilyMember({
+                                  ...additionalFamilyMember, // spread the old object to new state
+                                  firstName: e.target.value, // update the state with new value
+                                })
+                              }
+                              css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                            />
+                          );
+
+                          member.lastName && (
+                            <Input
+                              label="Last Name"
+                              type="string"
+                              value={member.lastName}
+                              handleChange={(e) =>
+                                setAdditionalFamilyMember({
+                                  ...additionalFamilyMember, // spread the old object to new state
+                                  lastName: e.target.value, // update the state with new value
+                                })
+                              }
+                              css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                            />
+                          );
+
+                          member.email && (
+                            <Input
+                              label="Last Name"
+                              type="string"
+                              value={member.email}
+                              handleChange={(e) =>
+                                setAdditionalFamilyMember({
+                                  ...additionalFamilyMember, // spread the old object to new state
+                                  email: e.target.value, // update the state with new value
+                                })
+                              }
+                              css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                            />
+                          );
+                        })}
+                    </div>
+                  </div>
+                  <div className="mt-5 sm:mt-6">
+                    <button
+                      className="inline-flex justify-center w-full rounded-md border border-transparent shadow-sm px-4 py-2 bg-green-500 text-base font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 sm:text-sm"
+                      onClick={(e) => handleSubmit(e)}
+                    >
+                      Sign up
+                    </button>
+                  </div>
+                  {errors.map((error) => {
+                    return (
+                      <div className="mb-5 leading-6 text-gray-900">
+                        <p>{error}</p>;
+                      </div>
+                    );
+                  })}
+                </div>
+              </Popup>
+            )}
             {inputQuestions.map((question) => {
               if (!finishedInitialQuestions && question.initial === true) {
                 return (
@@ -284,6 +307,7 @@ function SignupFormPage() {
                     label="Add another member"
                   />
                 )}
+                {familyMemberErrors && <div>{familyMemberErrors}</div>}
               </>
             )}
             <div className="flex-row flex justify-between">

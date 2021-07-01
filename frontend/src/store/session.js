@@ -38,19 +38,22 @@ export const restoreUser = () => async (dispatch) => {
 };
 
 //signup thunk
-export const signup = (user) => async (dispatch) => {
-  const { email, password } = user;
-  const response = await csrfFetch("/api/users", {
-    method: "POST",
-    body: JSON.stringify({
-      email,
-      password,
-    }),
-  });
-  const data = await response.json();
-  dispatch(setUser(data.user));
-  return response;
-};
+export const signup =
+  (firstName, lastName, email, password, familyMembers) => async (dispatch) => {
+    const response = await csrfFetch("/api/users", {
+      method: "POST",
+      body: JSON.stringify({
+        firstName,
+        lastName,
+        email,
+        password,
+        familyMembers,
+      }),
+    });
+    const data = await response.json();
+    dispatch(setUser(data.user));
+    return response;
+  };
 
 //logout thunk
 export const logout = () => async (dispatch) => {
