@@ -2,7 +2,7 @@ import React from "react";
 import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
 import Input from "../controls/Input";
 
-function FamilyMembers() {
+function FamilyMemberInputs() {
   const { additionalFamilyMember, setAdditionalFamilyMember } =
     useAddFamilyMemberSignUp();
   return (
@@ -47,4 +47,4 @@ function FamilyMembers() {
   );
 }
 
-export default FamilyMembers;
+export default FamilyMemberInputs;

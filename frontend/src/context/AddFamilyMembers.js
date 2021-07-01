@@ -9,6 +9,8 @@ function AddFamilyMembersProvider(props) {
     lastName: "",
     email: "",
   });
+  const [familyMembers, setFamilyMembers] = useState([]); // get number of
+  //family members by the length of the array
   return (
     <AddFamilyMembersContext.Provider
       value={{
@@ -16,6 +18,8 @@ function AddFamilyMembersProvider(props) {
         setAddFamilyMembers,
         additionalFamilyMember,
         setAdditionalFamilyMember,
+        familyMembers,
+        setFamilyMembers,
       }}
     >
       {props.children}

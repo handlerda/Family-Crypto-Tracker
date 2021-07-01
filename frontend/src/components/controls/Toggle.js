@@ -1,10 +1,10 @@
 import { Switch } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/solid";
-import React, { useState } from "react";
-import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
+import React from "react";
+//import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
 
-function Toggle({ label, handleClick }) {
-  const { addFamilyMembers, setAddFamilyMembers } = useAddFamilyMemberSignUp();
+function Toggle({ label, handleToggleChange, toggled }) {
+  // const { addFamilyMembers, setAddFamilyMembers } = useAddFamilyMemberSignUp();
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
@@ -12,10 +12,10 @@ function Toggle({ label, handleClick }) {
     <div className="flex justify-between">
       <span className="flex-shrink-0">{label}</span>
       <Switch
-        checked={addFamilyMembers}
-        onChange={() => setAddFamilyMembers(!addFamilyMembers)}
+        checked={true}
+        onChange={handleToggleChange}
         className={classNames(
-          addFamilyMembers ? "bg-indigo-600" : "bg-gray-200",
+          toggled ? "bg-indigo-600" : "bg-gray-200",
           "relative inline-flex flex-shrink-0 h-6 w-11 border-2 border-transparent rounded-full cursor-pointer transition-colors ease-in-out duration-200 focus:outline-none ring-2 focus:ring-offset-2 ring-indigo-500"
         )}
       >
@@ -23,7 +23,7 @@ function Toggle({ label, handleClick }) {
         <span
           aria-hidden="true"
           className={classNames(
-            addFamilyMembers ? "translate-x-5" : "translate-x-0",
+            toggled ? "translate-x-5" : "translate-x-0",
             "pointer-events-none inline-block h-5 w-5 rounded-full bg-white shadow transform ring-0 transition ease-in-out duration-200"
           )}
         />

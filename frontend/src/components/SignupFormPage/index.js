@@ -2,14 +2,15 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, Redirect } from "react-router-dom";
 import * as sessionActions from "../../store/session";
-import Toggle from "../controls/Toggle";
+
 import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
 import Input from "../controls/Input";
-import FamilyMembers from "./FamilyMembers";
+import FamilyMemberInputs from "./FamilyMembersInputs";
 import Popup from "../controls/Popup";
 import { Dialog } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/outline";
 import FamilyMemberCounter from "../controls/FamilyMemberCounter";
+import Toggle from "../controls/Toggle";
 
 function SignupFormPage() {
   const dispatch = useDispatch();
@@ -20,7 +21,14 @@ function SignupFormPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const { addFamilyMembers, setAddFamilyMembers } = useAddFamilyMemberSignUp();
+  const {
+    addFamilyMembers,
+    setAddFamilyMembers,
+    additionalFamilyMember,
+    setAdditionalFamilyMember,
+    familyMembers,
+    setFamilyMembers,
+  } = useAddFamilyMemberSignUp();
   const [finishedInitialQuestions, setInitialQuestions] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
   const [errors, setErrors] = useState([]);
@@ -78,6 +86,22 @@ function SignupFormPage() {
     setShowPopUp(true);
   }
 
+  //handle adding family members
+  function addFamilyMembersForm(e) {
+    e.preventDefault();
+    setFamilyMembers((prevState) => [...prevState, additionalFamilyMember]);
+    setAdditionalFamilyMember({ firstName: "", lastName: "", email: "" });
+  }
+
+  //remove family member
+  // function removeFamilyMembersForm(e) {
+  //   e.preventDefault();
+  //   // get familyMembers
+  //   //const members = familyMembers;
+
+  //   setFamilyMembers([...familyMembers.pop()]);
+  // }
+  console.log(`here are family members`, familyMembers);
   if (sessionUser) return <Redirect to="/" />;
 
   const handleSubmit = (e) => {
@@ -96,7 +120,7 @@ function SignupFormPage() {
     ]);
   };
 
-  //if(initial)
+  console.log(`additionalFamilyMember`, additionalFamilyMember);
   return (
     <div className="min-h-screen bg-pink-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">
       {showPopUp && (
@@ -182,17 +206,26 @@ function SignupFormPage() {
             })}
             {finishedInitialQuestions && (
               <>
-                <Toggle label="Add a family member" />
+                <Toggle
+                  label="Add a family member"
+                  handleToggleChange={() =>
+                    setAddFamilyMembers(!addFamilyMembers)
+                  }
+                  toggled={addFamilyMembers}
+                />
+                {addFamilyMembers && finishedInitialQuestions && (
+                  <div className=" py-3">
+                    <FamilyMemberInputs />
+                  </div>
+                )}
                 {addFamilyMembers && (
-                  <FamilyMemberCounter label="Add another member" />
+                  <FamilyMemberCounter
+                    handleAdd={(e) => addFamilyMembersForm(e)}
+                    //handleSubtract={(e) => removeFamilyMembersForm(e)}
+                    label="Add another member"
+                  />
                 )}
               </>
-            )}
-
-            {addFamilyMembers && finishedInitialQuestions && (
-              <div className=" py-3">
-                <FamilyMembers />
-              </div>
             )}
             <div className="flex-row flex justify-between">
               {!finishedInitialQuestions && (
