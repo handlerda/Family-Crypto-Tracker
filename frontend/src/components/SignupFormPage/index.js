@@ -9,6 +9,7 @@ import FamilyMembers from "./FamilyMembers";
 import Popup from "../controls/Popup";
 import { Dialog } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/outline";
+import FamilyMemberCounter from "../controls/FamilyMemberCounter";
 
 function SignupFormPage() {
   const dispatch = useDispatch();
@@ -179,7 +180,14 @@ function SignupFormPage() {
                 );
               }
             })}
-            {finishedInitialQuestions && <Toggle label="Add a family member" />}
+            {finishedInitialQuestions && (
+              <>
+                <Toggle label="Add a family member" />
+                {addFamilyMembers && (
+                  <FamilyMemberCounter label="Add another member" />
+                )}
+              </>
+            )}
 
             {addFamilyMembers && finishedInitialQuestions && (
               <div className=" py-3">
