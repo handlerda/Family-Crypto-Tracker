@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import LoginFormModal from "../LoginFormModal";
@@ -8,16 +8,27 @@ import { Disclosure, Menu, Transition } from "@headlessui/react";
 import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { PlusIcon } from "@heroicons/react/solid";
 import { CogIcon } from "@heroicons/react/solid";
-
+import { useDispatch } from "react-redux";
+import * as sessionActions from "../../store/session";
 function Navigation({ isLoaded }) {
+  const dispatch = useDispatch();
+
+  //log the user out
+  const logout = (e) => {
+    e.preventDefault();
+    dispatch(sessionActions.logout());
+  };
+
   const unauthenticatedNavigation = [
     { name: "What we do", href: "#", current: false },
     { name: "Why crypfam", href: "#", current: false },
   ];
 
+  //logout
+
   const unauthenticatedButtons = [
     { name: "Login", href: "#", current: false },
-    { name: "Signup", href: "#", current: false },
+    { name: "Signup", href: "/sign-up", current: false },
     { name: "Demo user", href: "#", current: false },
   ];
 
@@ -32,7 +43,7 @@ function Navigation({ isLoaded }) {
   const userNavigation = [
     { name: "Your Profile", href: "#" },
     { name: "Settings", href: "#" },
-    { name: "Sign out", href: "#" },
+    { name: "Sign out", href: "/logout" },
   ];
 
   function classNames(...classes) {
@@ -41,7 +52,6 @@ function Navigation({ isLoaded }) {
 
   // sessionUser
   const sessionUser = useSelector((state) => state.session.user);
-  console.log(sessionUser);
 
   return (
     isLoaded && (
@@ -160,15 +170,15 @@ function Navigation({ isLoaded }) {
                                 {userNavigation.map((item) => (
                                   <Menu.Item key={item.name}>
                                     {({ active }) => (
-                                      <a
-                                        href={item.href}
+                                      <Link
                                         className={classNames(
                                           active ? "bg-gray-100" : "",
                                           "block px-4 py-2 text-sm text-gray-700"
                                         )}
+                                        onClick={logout}
                                       >
                                         {item.name}
-                                      </a>
+                                      </Link>
                                     )}
                                   </Menu.Item>
                                 ))}
@@ -187,9 +197,9 @@ function Navigation({ isLoaded }) {
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 {sessionUser
                   ? authenticatedNavigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className={classNames(
                           item.current
                             ? "bg-gray-900 text-white"
@@ -199,7 +209,7 @@ function Navigation({ isLoaded }) {
                         aria-current={item.current ? "page" : undefined}
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))
                   : unauthenticatedNavigation.map((item) => (
                       <a
@@ -231,13 +241,13 @@ function Navigation({ isLoaded }) {
                   </div>
                   <div className="mt-3 px-2 space-y-1 sm:px-3">
                     {userNavigation.map((item) => (
-                      <a
+                      <Link
                         key={item.name}
-                        href={item.href}
+                        to={item.href}
                         className="block px-3 py-2 rounded-md text-base font-medium text-white hover:text-white hover:bg-gray-700"
                       >
                         {item.name}
-                      </a>
+                      </Link>
                     ))}
                   </div>
                 </div>

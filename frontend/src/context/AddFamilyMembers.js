@@ -8,6 +8,7 @@ function AddFamilyMembersProvider(props) {
     firstName: "",
     lastName: "",
     email: "",
+    phone: "",
   });
   const [familyMembers, setFamilyMembers] = useState([]); // get number of
   //family members by the length of the array

@@ -15,6 +15,14 @@ module.exports = {
       },
       hashedPassword: {
         type: Sequelize.STRING.BINARY,
+        allowNull: true,
+      },
+      headOfHouseHold: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+      },
+      phone: {
+        type: Sequelize.BIGINT,
         allowNull: false,
       },
       firstName: {

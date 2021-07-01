@@ -20,6 +20,7 @@ function SignupFormPage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState("");
   const {
     addFamilyMembers,
     setAddFamilyMembers,
@@ -70,6 +71,13 @@ function SignupFormPage() {
       setValue: setConfirmPassword,
       initial: false,
     },
+    {
+      label: "Phone Number",
+      type: "phone",
+      value: phoneNumber,
+      setValue: setPhoneNumber,
+      initial: false,
+    },
   ];
 
   // will take user to password and additional fam member
@@ -94,22 +102,27 @@ function SignupFormPage() {
       //clear error state if there were previous errors
       setFamilyMemberErrors([]);
       setFamilyMembers((prevState) => [...prevState, additionalFamilyMember]);
-      setAdditionalFamilyMember({ firstName: "", lastName: "", email: "" });
+      setAdditionalFamilyMember({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+      });
     } else {
       setFamilyMemberErrors(["Must be a valid email"]);
     }
   }
 
   //remove family member
-  // function removeFamilyMembersForm(e) {
-  //   e.preventDefault();
-  //   console.log(`hi`);
-  //   // get family members
-  //   const members = familyMembers;
-  //   setFamilyMembers({
-  //     ...[members.slice(members.length + 1)],
-  //   });
-  // }
+  function removeFamilyMembersForm(e) {
+    e.preventDefault();
+    // get family members
+    // const members = familyMembers;
+    setFamilyMembers(
+      (prevMembers) => prevMembers.slice(0, prevMembers.length - 1)
+      //...[members.slice(members.length + 1)],
+    );
+  }
 
   if (sessionUser) return <Redirect to="/" />;
   // handle submit
@@ -125,6 +138,7 @@ function SignupFormPage() {
           firstName,
           lastName,
           email,
+          phoneNumber,
           password,
           familyMembers
         )
@@ -163,7 +177,7 @@ function SignupFormPage() {
           <form className="space-y-6" onSubmit={handleSubmit}>
             {showPopUp && (
               <Popup open={showPopUp} setOpen={setShowPopUp}>
-                <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-sm sm:w-full sm:p-6">
+                <div className="inline-block align-bottom bg-white rounded-lg px-4 pt-5 pb-4 text-left overflow-hidden shadow-xl transform transition-all sm:my-4 sm:align-middle sm:max-w-sm sm:w-full sm:p-10">
                   <div>
                     <div className="mx-auto flex items-center justify-center h-12 w-12 rounded-full bg-green-100">
                       <CheckIcon
@@ -197,49 +211,55 @@ function SignupFormPage() {
                         // THIS IS NOT WORKING ISSUE WITH RENDERING / RETURN
                         familyMembers.map((member) => {
                           // need to figure out return strat
-                          member.lastName && (
-                            <Input
-                              label="First Name"
-                              type="string"
-                              value={member.firstName}
-                              handleChange={(e) =>
-                                setAdditionalFamilyMember({
-                                  ...additionalFamilyMember, // spread the old object to new state
-                                  firstName: e.target.value, // update the state with new value
-                                })
-                              }
-                              css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                            />
-                          );
+                          return (
+                            <div className="border-4 my-4">
+                              {[
+                                member.firstName && (
+                                  <Input
+                                    label="First Name"
+                                    type="string"
+                                    value={member.firstName}
+                                    handleChange={(e) =>
+                                      setAdditionalFamilyMember({
+                                        ...additionalFamilyMember, // spread the old object to new state
+                                        firstName: e.target.value, // update the state with new value
+                                      })
+                                    }
+                                    css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                                  />
+                                ),
 
-                          member.lastName && (
-                            <Input
-                              label="Last Name"
-                              type="string"
-                              value={member.lastName}
-                              handleChange={(e) =>
-                                setAdditionalFamilyMember({
-                                  ...additionalFamilyMember, // spread the old object to new state
-                                  lastName: e.target.value, // update the state with new value
-                                })
-                              }
-                              css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                            />
-                          );
+                                member.lastName && (
+                                  <Input
+                                    label="Last Name"
+                                    type="string"
+                                    value={member.lastName}
+                                    handleChange={(e) =>
+                                      setAdditionalFamilyMember({
+                                        ...additionalFamilyMember, // spread the old object to new state
+                                        lastName: e.target.value, // update the state with new value
+                                      })
+                                    }
+                                    css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                                  />
+                                ),
 
-                          member.email && (
-                            <Input
-                              label="Last Name"
-                              type="string"
-                              value={member.email}
-                              handleChange={(e) =>
-                                setAdditionalFamilyMember({
-                                  ...additionalFamilyMember, // spread the old object to new state
-                                  email: e.target.value, // update the state with new value
-                                })
-                              }
-                              css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
-                            />
+                                member.email && (
+                                  <Input
+                                    label="Last Name"
+                                    type="string"
+                                    value={member.email}
+                                    handleChange={(e) =>
+                                      setAdditionalFamilyMember({
+                                        ...additionalFamilyMember, // spread the old object to new state
+                                        email: e.target.value, // update the state with new value
+                                      })
+                                    }
+                                    css=" block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+                                  />
+                                ),
+                              ]}
+                            </div>
                           );
                         })}
                     </div>
@@ -303,7 +323,7 @@ function SignupFormPage() {
                 {addFamilyMembers && (
                   <FamilyMemberCounter
                     handleAdd={(e) => addFamilyMembersForm(e)}
-                    //handleSubtract={(e) => removeFamilyMembersForm(e)}
+                    handleSubtract={(e) => removeFamilyMembersForm(e)}
                     label="Add another member"
                   />
                 )}
