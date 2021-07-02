@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link, NavLink, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
@@ -10,9 +10,11 @@ import { PlusIcon } from "@heroicons/react/solid";
 import { CogIcon } from "@heroicons/react/solid";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
+import ZaboPopup from "../controls/ZaboPopup";
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
+  const [showZabo, setShowZabo] = useState(false);
 
   //log the user out
   const logout = (e) => {
@@ -121,6 +123,7 @@ function Navigation({ isLoaded }) {
                       <button
                         type="button"
                         className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        onClick={() => setShowZabo(!showZabo)}
                       >
                         <PlusIcon
                           className="-ml-1 mr-2 h-5 w-5"
@@ -194,7 +197,7 @@ function Navigation({ isLoaded }) {
                 </div>
               </div>
             </div>
-
+            {showZabo && <ZaboPopup />}
             <Disclosure.Panel className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 {sessionUser
