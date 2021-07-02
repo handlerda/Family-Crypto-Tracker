@@ -1,5 +1,5 @@
 // twilio envs
-require("dotenv").config({ path: "../../.env.development" });
+require("dotenv").config({ path: "../../.env" });
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const twilioAuthToken = process.env.TWILIO_AUTH_TOKEN;
 const twilioNumber = process.env.TWILIO_NUMBER;

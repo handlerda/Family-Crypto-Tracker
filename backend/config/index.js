@@ -1,5 +1,5 @@
 // must use dotenv to import .env
-require("dotenv").config({ path: ".env.development" });
+require("dotenv").config({ path: ".env" });
 module.exports = {
   environment: process.env.NODE_ENV || "development",
   port: process.env.PORT || 5000,
