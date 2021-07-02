@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import LoginFormModal from "../LoginFormModal";
@@ -12,6 +12,7 @@ import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
+  const history = useHistory();
 
   //log the user out
   const logout = (e) => {
@@ -27,7 +28,7 @@ function Navigation({ isLoaded }) {
   //logout
 
   const unauthenticatedButtons = [
-    { name: "Login", href: "#", current: false },
+    { name: "Login", href: "/login", current: false },
     { name: "Signup", href: "/sign-up", current: false },
     { name: "Demo user", href: "#", current: false },
   ];
@@ -133,6 +134,7 @@ function Navigation({ isLoaded }) {
                           <button
                             type="button"
                             className="relative inline-flex items-center mx-4 px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                            onClick={() => history.push(item.href)}
                           >
                             <span>{item.name}</span>
                           </button>

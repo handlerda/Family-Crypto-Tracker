@@ -15,7 +15,7 @@ module.exports = {
       },
       hashedPassword: {
         type: Sequelize.STRING.BINARY,
-        allowNull: true,
+        allowNull: false,
       },
       headOfHouseHold: {
         type: Sequelize.BOOLEAN,
@@ -24,6 +24,7 @@ module.exports = {
       phone: {
         type: Sequelize.BIGINT,
         allowNull: false,
+        unique: true,
       },
       firstName: {
         type: Sequelize.STRING(50),

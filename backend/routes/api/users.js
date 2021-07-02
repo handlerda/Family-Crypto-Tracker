@@ -50,7 +50,7 @@ const addFamilyHeadHouseHold = async (req, res, next) => {
       },
     },
   });
-  if (!usersInDB.length) {
+  if (!usersInDB) {
     // add users to the db
     // add family
     const newFamily = await Family.create({
@@ -72,12 +72,12 @@ const addFamilyHeadHouseHold = async (req, res, next) => {
     res.locals.headHouseHold = headOfHouseHold;
     next();
   } else {
-    res.json(
-      {
-        error: "User exists",
-      },
-      404
-    );
+    // throw errors
+    const err = new Error("Login failed");
+    err.status = 401;
+    err.title = "Login failed";
+    err.errors = ["The user already exists."];
+    return next(err);
   }
 };
 
@@ -90,20 +90,30 @@ router.post(
   validateSignup,
   addFamilyHeadHouseHold,
   asyncHandler(async (req, res) => {
-    const { familyMembers } = req.body;
+    const { familyMembers, familyPassword } = req.body;
     const { family, headHouseHold } = res.locals;
     //console.log(res.locals);
     // console.log(headHouseHold, "head of household");
 
     await Promise.all(
       familyMembers.map((member) =>
-        User.create({
+        User.signup({
           ...member,
+          password: familyPassword,
           familyId: family.id,
           headOfHouseHold: false,
         })
       )
     );
+
+    // email,
+    //   password,
+    //   firstName,
+    //   lastName,
+    //   phone,
+    //   headOfHouseHold: true,
+    //   familyId: newFamily.id,
+
     await setTokenCookie(res, headHouseHold);
 
     return res.json({

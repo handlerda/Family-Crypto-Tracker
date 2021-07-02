@@ -4,6 +4,7 @@ export const useAddFamilyMemberSignUp = () =>
   useContext(AddFamilyMembersContext);
 function AddFamilyMembersProvider(props) {
   const [addFamilyMembers, setAddFamilyMembers] = useState(false);
+  const [familyPassword, setFamilyPassword] = useState(false);
   const [additionalFamilyMember, setAdditionalFamilyMember] = useState({
     firstName: "",
     lastName: "",
@@ -21,6 +22,8 @@ function AddFamilyMembersProvider(props) {
         setAdditionalFamilyMember,
         familyMembers,
         setFamilyMembers,
+        familyPassword,
+        setFamilyPassword,
       }}
     >
       {props.children}

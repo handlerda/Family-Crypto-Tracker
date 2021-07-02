@@ -28,6 +28,8 @@ function SignupFormPage() {
     setAdditionalFamilyMember,
     familyMembers,
     setFamilyMembers,
+    familyPassword,
+    setFamilyPassword,
   } = useAddFamilyMemberSignUp();
   const [finishedInitialQuestions, setInitialQuestions] = useState(false);
   const [showPopUp, setShowPopUp] = useState(false);
@@ -116,12 +118,18 @@ function SignupFormPage() {
   //remove family member
   function removeFamilyMembersForm(e) {
     e.preventDefault();
-    // get family members
-    // const members = familyMembers;
-    setFamilyMembers(
-      (prevMembers) => prevMembers.slice(0, prevMembers.length - 1)
-      //...[members.slice(members.length + 1)],
+
+    // pop from the array
+    setFamilyMembers((prevMembers) =>
+      prevMembers.slice(0, prevMembers.length - 1)
     );
+    // change the input values
+    setAdditionalFamilyMember({
+      firstName: "",
+      lastName: "",
+      email: "",
+      phone: "",
+    });
   }
 
   if (sessionUser) return <Redirect to="/" />;
@@ -140,10 +148,15 @@ function SignupFormPage() {
           email,
           phoneNumber,
           password,
-          familyMembers
+          familyMembers,
+          familyPassword
         )
       ).catch(async (res) => {
         const data = await res.json();
+        //clear set family member state
+        setFamilyMembers([]);
+        setFamilyPassword("");
+
         if (data && data.errors) setErrors(data.errors);
       });
     }
@@ -163,9 +176,9 @@ function SignupFormPage() {
           Sign up for an account
         </h2>
         <p className="mt-2 text-center text-sm text-white">
-          Already have an invite from a family member
+          Received a text with a family code?
           <Link
-            to="/"
+            to="/family-invite"
             className="font-medium hover:text-purple-600 pl-2 text-white pb-4"
           >
             Click here
@@ -317,6 +330,14 @@ function SignupFormPage() {
                 />
                 {addFamilyMembers && finishedInitialQuestions && (
                   <div className=" py-3">
+                    <Input
+                      label="Family Password"
+                      type="password"
+                      value={familyPassword}
+                      handleChange={(e) => setFamilyPassword(e.target.value)}
+                      css="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm mb-10"
+                    />
+
                     <FamilyMemberInputs />
                   </div>
                 )}

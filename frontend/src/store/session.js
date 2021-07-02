@@ -39,7 +39,15 @@ export const restoreUser = () => async (dispatch) => {
 
 //signup thunk
 export const signup =
-  (firstName, lastName, email, phone, password, familyMembers) =>
+  (
+    firstName,
+    lastName,
+    email,
+    phone,
+    password,
+    familyMembers,
+    familyPassword
+  ) =>
   async (dispatch) => {
     const response = await csrfFetch("/api/users", {
       method: "POST",
@@ -50,6 +58,7 @@ export const signup =
         phone,
         password,
         familyMembers,
+        familyPassword,
       }),
     });
     const data = await response.json();

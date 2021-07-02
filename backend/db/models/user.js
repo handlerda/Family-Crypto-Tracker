@@ -29,11 +29,12 @@ module.exports = (sequelize, DataTypes) => {
       },
       headOfHouseHold: {
         type: DataTypes.BOOLEAN,
-        allowNull: true,
+        allowNull: false,
       },
       phone: {
         type: DataTypes.BIGINT,
         allowNull: false,
+        unique: true,
       },
       zaboId: {
         type: DataTypes.STRING,
@@ -91,11 +92,13 @@ module.exports = (sequelize, DataTypes) => {
   };
 
   User.login = async function ({ credential, password }) {
+    console.log(`here from phone ${credential}`);
     const user = await User.scope("loginUser").findOne({
       where: {
-        email: credential,
+        phone: credential,
       },
     });
+    console.log(`here from user`, user);
     if (user && user.validatePassword(password)) {
       return await User.scope("currentUser").findByPk(user.id);
     }
