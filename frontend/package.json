@@ -18,7 +18,8 @@
     "react-scripts": "4.0.3",
     "redux": "^4.1.0",
     "redux-thunk": "^2.3.0",
-    "zabo-react-component": "^1.1.0"
+    "zabo-react-component": "^1.1.0",
+    "zabo-sdk-js": "^1.3.2"
   },
   "scripts": {
     "start": "craco start",

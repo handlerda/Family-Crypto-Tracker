@@ -11,12 +11,31 @@ import { CogIcon } from "@heroicons/react/solid";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
 import ZaboPopup from "../controls/ZaboPopup";
+//import Zabo from "zabo"
+import Zabo from "zabo-sdk-js";
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const [showZabo, setShowZabo] = useState(false);
 
+  // const zabo = await Zabo.init({
+  //   clientId:
+  //     "gs7dpJmgySUftv9mSPFrrxaMS4FcVwEQ4ZgLE7M5ejnUmkOscKrr7lRwhz56ytvw",
+  //   env: "sandbox",
+  // });
+
+  //apiKey = 739d49d1454176aee3327eaa020c5935a40982fc
+  //secretKey = f61b47bf4bc809086d21268d4f91d13f223598474bc47c76f48c2a90980c577e
   //log the user out
+
+  const zaboLogin = async () => {
+    const zabo = await Zabo.init({
+      clientId: process.env.REACT_APP_ZABO_CLIENT_ID,
+      env: "sandbox",
+    });
+    zabo.connect();
+  };
+
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
@@ -32,21 +51,20 @@ function Navigation({ isLoaded }) {
   const unauthenticatedButtons = [
     { name: "Login", href: "/login", current: false },
     { name: "Signup", href: "/sign-up", current: false },
-    { name: "Demo user", href: "#", current: false },
+    { name: "Demo user", href: "/", current: false },
   ];
 
   //nav links for a logged in user
   const authenticatedNavigation = [
-    { name: "Family Dashboard", href: "#", current: false },
-    { name: "My Dashboard", href: "#", current: false },
-    { name: "Transactions", href: "#", current: false },
-    { name: "Balances", href: "#", current: false },
+    { name: "Family Dashboard", href: "/", current: false },
+    { name: "My Dashboard", href: "/", current: false },
+    { name: "Transactions", href: "", current: false },
+    { name: "Balances", href: "/", current: false },
   ];
   //user settings for a logged in user
   const userNavigation = [
-    { name: "Your Profile", href: "#" },
-    { name: "Settings", href: "#" },
-    { name: "Sign out", href: "/logout" },
+    { name: "Settings", href: "settings" },
+    { name: "Sign out" },
   ];
 
   function classNames(...classes) {
@@ -123,7 +141,7 @@ function Navigation({ isLoaded }) {
                       <button
                         type="button"
                         className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                        onClick={() => setShowZabo(!showZabo)}
+                        onClick={zaboLogin}
                       >
                         <PlusIcon
                           className="-ml-1 mr-2 h-5 w-5"
@@ -172,21 +190,41 @@ function Navigation({ isLoaded }) {
                                 static
                                 className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                               >
-                                {userNavigation.map((item) => (
-                                  <Menu.Item key={item.name}>
-                                    {({ active }) => (
-                                      <Link
-                                        className={classNames(
-                                          active ? "bg-gray-100" : "",
-                                          "block px-4 py-2 text-sm text-gray-700"
+                                {userNavigation.map((item) => {
+                                  if (item.name === "Sign out") {
+                                    return (
+                                      <Menu.Item key={item.name}>
+                                        {({ active }) => (
+                                          <Link
+                                            className={classNames(
+                                              active ? "bg-gray-100" : "",
+                                              "block px-4 py-2 text-sm text-gray-700"
+                                            )}
+                                            onClick={logout}
+                                          >
+                                            {item.name}
+                                          </Link>
                                         )}
-                                        onClick={logout}
-                                      >
-                                        {item.name}
-                                      </Link>
-                                    )}
-                                  </Menu.Item>
-                                ))}
+                                      </Menu.Item>
+                                    );
+                                  } else {
+                                    return (
+                                      <Menu.Item key={item.name}>
+                                        {({ active }) => (
+                                          <Link
+                                            className={classNames(
+                                              active ? "bg-gray-100" : "",
+                                              "block px-4 py-2 text-sm text-gray-700"
+                                            )}
+                                            to={item.href}
+                                          >
+                                            {item.name}
+                                          </Link>
+                                        )}
+                                      </Menu.Item>
+                                    );
+                                  }
+                                })}
                               </Menu.Items>
                             </Transition>
                           </>
@@ -197,7 +235,7 @@ function Navigation({ isLoaded }) {
                 </div>
               </div>
             </div>
-            {showZabo && <ZaboPopup />}
+            {/* {showZabo && } */}
             <Disclosure.Panel className="md:hidden">
               <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
                 {sessionUser

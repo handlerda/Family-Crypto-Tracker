@@ -7,6 +7,7 @@ function ZaboPopup() {
       clientId={process.env.REACT_APP_ZABO_CLIENT_ID}
       env="sandbox"
       onInit={(team) => console.log("Team", team)}
+      on
     />
   );
 }

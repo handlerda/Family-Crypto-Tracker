@@ -6,6 +6,7 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import LoginForm from "./components/LoginFormModal/LoginForm";
 import ZaboPopup from "./components/controls/ZaboPopup";
+import Settings from "./components/Settings";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -28,10 +29,10 @@ function App() {
             <Navigation isLoaded={isLoaded} />
             <LoginForm />
           </Route>
-          {/* <Route path="/connect" exact>
+          <Route path="/settings" exact>
             <Navigation isLoaded={isLoaded} />
-            <ZaboPopup />
-          </Route> */}
+            <Settings />
+          </Route>
         </Switch>
       )}
     </>

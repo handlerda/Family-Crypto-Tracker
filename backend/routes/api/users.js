@@ -7,6 +7,7 @@ const { handleValidationErrors } = require("../../utils/validation");
 const { setTokenCookie, requireAuth } = require("../../utils/auth");
 const { User, Family } = require("../../db/models");
 const { Op } = require("sequelize");
+const sendTxtMsg = require("../twilio");
 
 const router = express.Router();
 
@@ -43,14 +44,14 @@ const addFamilyHeadHouseHold = async (req, res, next) => {
   // get list of emails
   const emails = familyMembersEmails.concat(headHouseholdEmail);
   // check to see if any emails exist
-  const usersInDB = await User.findAll({
+  const usersInDB = await User.count({
     where: {
       email: {
         [Op.in]: emails,
       },
     },
   });
-  if (!usersInDB) {
+  if (usersInDB === 0) {
     // add users to the db
     // add family
     const newFamily = await Family.create({
@@ -92,30 +93,28 @@ router.post(
   asyncHandler(async (req, res) => {
     const { familyMembers, familyPassword } = req.body;
     const { family, headHouseHold } = res.locals;
-    //console.log(res.locals);
-    // console.log(headHouseHold, "head of household");
 
-    await Promise.all(
-      familyMembers.map((member) =>
-        User.signup({
-          ...member,
-          password: familyPassword,
-          familyId: family.id,
-          headOfHouseHold: false,
-        })
-      )
-    );
-
-    // email,
-    //   password,
-    //   firstName,
-    //   lastName,
-    //   phone,
-    //   headOfHouseHold: true,
-    //   familyId: newFamily.id,
-
+    // check if family members
+    if (familyMembers.length) {
+      await Promise.all([
+        familyMembers.map((member) => {
+          // sign family members up
+          User.signup({
+            ...member,
+            password: familyPassword,
+            familyId: family.id,
+            headOfHouseHold: false,
+          });
+          // call twilio helper function
+          sendTxtMsg(
+            `Welcome to Crypfam ${member.firstName} 🎉 your password is: ${familyPassword}`,
+            member.phone
+          );
+        }),
+      ]);
+    }
+    //login the head of household
     await setTokenCookie(res, headHouseHold);
-
     return res.json({
       headHouseHold,
     });
