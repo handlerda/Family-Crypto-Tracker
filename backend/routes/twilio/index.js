@@ -15,7 +15,6 @@ async function sendTxtMsg(msg, number) {
       to: `+1${number}`,
       from: twilioNumber,
     });
-    console.log(message);
     return message;
   } catch (error) {
     return error;
