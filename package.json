@@ -7,6 +7,6 @@
     "start": "npm start --prefix backend"
   },
   "name": "crypfam",
-  "version": "0.0.0.1",
+  "version": "0.0.1",
   "main": "index.js"
 }
