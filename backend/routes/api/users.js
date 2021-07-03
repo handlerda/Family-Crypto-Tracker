@@ -26,12 +26,11 @@ const validateSignup = [
   handleValidationErrors,
 ];
 
-// things I need to do
-// 1. add a new family
-// check if family / user already exist
+//addFamilyHeadHousHold middleware:
+// checks if a family exist
 // create new family
 
-const addFamilyHeadHouseHold = async (req, res, next) => {
+const addFamilyHeadHouseHold = asyncHandler(async (req, res, next) => {
   // check to see if user exists
   // get head of household email
   const { headHouseholdEmail, firstName, lastName, phone, email, password } =
@@ -80,7 +79,7 @@ const addFamilyHeadHouseHold = async (req, res, next) => {
     err.errors = ["The user already exists."];
     return next(err);
   }
-};
+});
 
 // 2. add users to family
 // 3. give head of household GLOBAL ACCESS
