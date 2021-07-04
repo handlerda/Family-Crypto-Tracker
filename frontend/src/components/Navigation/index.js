@@ -16,24 +16,27 @@ import Zabo from "zabo-sdk-js";
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const [showZabo, setShowZabo] = useState(false);
-
-  // const zabo = await Zabo.init({
-  //   clientId:
-  //     "gs7dpJmgySUftv9mSPFrrxaMS4FcVwEQ4ZgLE7M5ejnUmkOscKrr7lRwhz56ytvw",
-  //   env: "sandbox",
-  // });
-
-  //apiKey = 739d49d1454176aee3327eaa020c5935a40982fc
-  //secretKey = f61b47bf4bc809086d21268d4f91d13f223598474bc47c76f48c2a90980c577e
-  //log the user out
 
   const zaboLogin = async () => {
     const zabo = await Zabo.init({
       clientId: process.env.REACT_APP_ZABO_CLIENT_ID,
       env: "sandbox",
     });
-    zabo.connect();
+    return zabo.connect();
+  };
+
+  const newZaboAccount = async () => {
+    const zabo = await zaboLogin();
+    // get account information
+    zabo
+      .onConnection((account) => {
+        // handle successful connection
+        console.log("account connected:", account);
+      })
+      .onError((error) => {
+        // handle error
+        console.error("account connection error:", error.message);
+      });
   };
 
   const logout = (e) => {
@@ -141,7 +144,7 @@ function Navigation({ isLoaded }) {
                       <button
                         type="button"
                         className="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2"
-                        onClick={zaboLogin}
+                        onClick={newZaboAccount}
                       >
                         <PlusIcon
                           className="-ml-1 mr-2 h-5 w-5"

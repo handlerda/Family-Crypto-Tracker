@@ -7,6 +7,7 @@ import Navigation from "./components/Navigation";
 import LoginForm from "./components/LoginFormModal/LoginForm";
 import ZaboPopup from "./components/controls/ZaboPopup";
 import Settings from "./components/Settings";
+import { getWallet } from "./store/wallet";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -14,26 +15,34 @@ function App() {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
+  async function handleClick(e) {
+    const data = await dispatch(getWallet("123455"));
+    console.log(data);
+  }
+
   return (
     <>
       {isLoaded && (
-        <Switch>
-          <Route path="/" exact>
-            <Navigation isLoaded={isLoaded} />
-          </Route>
-          <Route path="/sign-up" exact>
-            <Navigation isLoaded={isLoaded} />
-            <SignupFormPage />
-          </Route>
-          <Route path="/login" exact>
-            <Navigation isLoaded={isLoaded} />
-            <LoginForm />
-          </Route>
-          <Route path="/settings" exact>
-            <Navigation isLoaded={isLoaded} />
-            <Settings />
-          </Route>
-        </Switch>
+        <>
+          <Navigation isLoaded={isLoaded} />
+          <Switch>
+            <Route path="/" exact>
+              <div>
+                <h1>Hello world</h1>
+                <button onClick={handleClick}>Test</button>
+              </div>
+            </Route>
+            <Route path="/sign-up" exact>
+              <SignupFormPage />
+            </Route>
+            <Route path="/login" exact>
+              <LoginForm />
+            </Route>
+            <Route path="/settings" exact>
+              <Settings />
+            </Route>
+          </Switch>
+        </>
       )}
     </>
   );
