@@ -13,9 +13,11 @@ import * as sessionActions from "../../store/session";
 import ZaboPopup from "../controls/ZaboPopup";
 //import Zabo from "zabo"
 import Zabo from "zabo-sdk-js";
+import { addWallet } from "../../store/wallet";
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
+  const userId = useSelector((state) => state.session.user.id);
 
   const zaboLogin = async () => {
     const zabo = await Zabo.init({
@@ -32,6 +34,8 @@ function Navigation({ isLoaded }) {
       .onConnection((account) => {
         // handle successful connection
         console.log("account connected:", account);
+        const newWallet = dispatch(addWallet(userId, account));
+        console.log(newWallet);
       })
       .onError((error) => {
         // handle error

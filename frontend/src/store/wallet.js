@@ -36,11 +36,11 @@ export const getWallets = (userId) => async (dispatch) => {
 };
 
 //ADD WALLETS
-export const addWallet = (userId, accountId) => async (dispatch) => {
+export const addWallet = (userId, zaboAccountObject) => async (dispatch) => {
   const response = await csrfFetch(`/api/wallet`, {
     // send Zabo account id and Crypfam userId in body
     method: "POST",
-    body: JSON.stringify({ accountId, userId }),
+    body: JSON.stringify({ zaboAccountObject, userId }),
   });
   const data = await response.json();
   dispatch(thunk(ADD_WALLET, data.wallet));
