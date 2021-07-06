@@ -1,7 +1,7 @@
 const express = require("express");
 const asyncHandler = require("express-async-handler");
 const { requireAuth, restoreUser } = require("../../../utils/auth");
-const { User } = require("../../../db/models");
+const { User, Account, AuthorizedAccountUser } = require("../../../db/models");
 //const zabo = require("../../zabo");
 const Zabo = require("zabo-sdk-js");
 //console.log(zabo.toString());
@@ -26,13 +26,12 @@ const isZaboUser = async (req, res, next) => {
   //get user info
   const { id, zaboId } = req.user.dataValues;
   const crypfamUser = await User.findByPk(id);
-
+  // initialize zabo object
   const zabo = await Zabo.init({
     apiKey: process.env.ZABO_PUBLIC_KEY,
     secretKey: process.env.ZABO_PRIVATE_KEY,
     env: "sandbox",
   });
-
   //user not in zabo
   if (!crypfamUser.zaboId) {
     try {
@@ -74,24 +73,59 @@ router.post(
   restoreUser,
   isZaboUser,
   asyncHandler(async (req, res, next) => {
-    const { zaboAccountObject } = req.body;
-    // add accounts to db
+    try {
+      const { zaboAccountObject } = req.body;
+      const { id } = req.user.dataValues;
+      // initialize zabo object
+      const zabo = await Zabo.init({
+        apiKey: process.env.ZABO_PUBLIC_KEY,
+        secretKey: process.env.ZABO_PRIVATE_KEY,
+        env: "sandbox",
+      });
+      //create new account
+      const newAccount = await Account.create({
+        userId: id,
+        zaboId: zaboAccountObject.id,
+        provider: zaboAccountObject.provider.name,
+      });
+      //add account to junction table
+      await AuthorizedAccountUser.create({
+        userId: id,
+        accountId: newAccount.id,
+      });
+
+      // return the added account
+      res.status = 201;
+      res.json({
+        status: "added",
+        zaboAccountId: zaboAccountObject.id,
+        accountId: newAccount.id,
+        userId: id,
+      });
+    } catch (error) {
+      next(error);
+    }
+  })
+);
+
+router.get(
+  "/",
+  requireAuth,
+  restoreUser,
+  asyncHandler(async (req, res, next) => {
+    // get userId
     const { id } = req.user.dataValues;
-    console.log(req.user);
-    const currentUser = await User.findByPk(id);
-
-    //add authorized account
-    // await currentUser.addAuthorizedAccount({
-    //   userId: id,
-    //   zaboId: zaboAccountObject.id,
-    //   provider: zaboAccountObject.provider.name,
-    // });
-    //await currentUser.save();
-
-    console.log(currentUser);
-    await currentUser.save();
+    // get user
+    const user = await User.findByPk(id);
+    // get userAccounts
+    const userAccounts = await user.getAuthorizedAccounts();
+    // loop over each account
+    const accounts = userAccounts.map((account) => {
+      return account.toJSON();
+    });
+    console.log(accounts);
     res.json({
-      data: "ok",
+      accounts: accounts,
     });
   })
 );
@@ -99,4 +133,4 @@ router.post(
 module.exports = router;
 
 // add authorizedAccount model
-//npx sequelize model:generate --AuthorizedAccount
+//npx sequelize model:generate --name AuthorizedAccountUser --attributes userId:integer,accountId:integer;

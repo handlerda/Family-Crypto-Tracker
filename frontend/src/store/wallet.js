@@ -1,3 +1,4 @@
+import Zabo from "zabo-sdk-js";
 import { csrfFetch } from "./csrf";
 
 //crypfam === wallet
@@ -26,13 +27,42 @@ export const getWallet = (walletId) => async (dispatch) => {
 };
 
 //GET MULTIPLE WALLETS
-export const getWallets = (userId) => async (dispatch) => {
-  const response = await csrfFetch(`/api/wallet?userId=${userId}`, {
-    method: "GET",
-  });
+export const getWallets = () => async (dispatch) => {
+  // const response = await csrfFetch(`/api/wallet?userId=${userId}`, {
+  //   method: "GET",
+  // });
+  // const data = await response.json();
+  // dispatch(thunk(GET_WALLETS, data.wallets));
+  // return response
+
+  const response = await csrfFetch(`/api/wallet`);
   const data = await response.json();
-  dispatch(thunk(GET_WALLETS, data.wallets));
-  return response;
+  console.log(data);
+  // dispatch(thunk, data);
+  // console.log(data);
+  // return data;
+
+  //initialize zabo object
+  const zabo = await Zabo.init({
+    clientId: process.env.REACT_APP_ZABO_CLIENT_ID,
+    env: "sandbox",
+  });
+
+  try {
+    const accountData = await Promise.all(
+      data.accounts.map((account) => {
+        return zabo.accounts.get(account.zaboId);
+      })
+    );
+
+    console.log(accountData);
+    dispatch(thunk(GET_WALLETS, accountData));
+    return response;
+  } catch (error) {
+    console.log(error);
+    return error;
+  }
+  // take in array of accountIds
 };
 
 //ADD WALLETS

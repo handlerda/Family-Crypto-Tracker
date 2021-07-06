@@ -1,26 +1,22 @@
 "use strict";
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable("Accounts", {
+    return queryInterface.createTable("AuthorizedAccountUsers", {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER,
       },
-      zaboId: {
-        type: Sequelize.STRING,
-        unique: true,
-        allowNull: false,
-      },
       userId: {
         type: Sequelize.INTEGER,
+        allowNull: false,
         references: { model: "Users" },
-        allowNull: false,
       },
-      provider: {
-        type: Sequelize.STRING,
+      accountId: {
+        type: Sequelize.INTEGER,
         allowNull: false,
+        references: { model: "Accounts" },
       },
       createdAt: {
         allowNull: false,
@@ -35,6 +31,8 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable("Accounts");
+    return queryInterface.dropTable("AuthorizedAccountUsers");
   },
 };
+
+//c7565813-1f3c-40d0-81b7-38f8f2df25ec

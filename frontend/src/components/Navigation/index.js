@@ -17,7 +17,7 @@ import { addWallet } from "../../store/wallet";
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const userId = useSelector((state) => state.session.user.id);
+  const userId = useSelector((state) => state.session.user);
 
   const zaboLogin = async () => {
     const zabo = await Zabo.init({
@@ -34,7 +34,7 @@ function Navigation({ isLoaded }) {
       .onConnection((account) => {
         // handle successful connection
         console.log("account connected:", account);
-        const newWallet = dispatch(addWallet(userId, account));
+        const newWallet = dispatch(addWallet(userId.id, account));
         console.log(newWallet);
       })
       .onError((error) => {

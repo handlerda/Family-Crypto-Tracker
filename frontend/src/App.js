@@ -7,7 +7,7 @@ import Navigation from "./components/Navigation";
 import LoginForm from "./components/LoginFormModal/LoginForm";
 import ZaboPopup from "./components/controls/ZaboPopup";
 import Settings from "./components/Settings";
-import { getWallet } from "./store/wallet";
+import { getWallet, getWallets } from "./store/wallet";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -16,7 +16,7 @@ function App() {
   }, [dispatch]);
 
   async function handleClick(e) {
-    const data = await dispatch(getWallet("123455"));
+    const data = await dispatch(getWallets());
     console.log(data);
   }
 
