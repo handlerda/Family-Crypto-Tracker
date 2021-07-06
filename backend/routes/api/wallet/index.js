@@ -81,12 +81,13 @@ router.post(
     const currentUser = await User.findByPk(id);
 
     //add authorized account
-    await currentUser.addAuthorizedAccount({
-      userId: id,
-      zaboId: zaboAccountObject.id,
-      provider: zaboAccountObject.provider.name,
-    });
-    await currentUser.save();
+    // await currentUser.addAuthorizedAccount({
+    //   userId: id,
+    //   zaboId: zaboAccountObject.id,
+    //   provider: zaboAccountObject.provider.name,
+    // });
+    //await currentUser.save();
+
     console.log(currentUser);
     await currentUser.save();
     res.json({
