@@ -77,11 +77,7 @@ router.post(
       const { zaboAccountObject } = req.body;
       const { id } = req.user.dataValues;
       // initialize zabo object
-      const zabo = await Zabo.init({
-        apiKey: process.env.ZABO_PUBLIC_KEY,
-        secretKey: process.env.ZABO_PRIVATE_KEY,
-        env: "sandbox",
-      });
+
       //create new account
       const newAccount = await Account.create({
         userId: id,
@@ -117,12 +113,33 @@ router.get(
     const { id } = req.user.dataValues;
     // get user
     const user = await User.findByPk(id);
-    // get userAccounts
+    // get authorizedAccounts
     const userAccounts = await user.getAuthorizedAccounts();
-    // loop over each account
-    const accounts = userAccounts.map((account) => {
-      return account.toJSON();
+    // Initialize Zabo Object
+    const zabo = await Zabo.init({
+      apiKey: process.env.ZABO_PUBLIC_KEY,
+      secretKey: process.env.ZABO_PRIVATE_KEY,
+      env: "sandbox",
     });
+    // loop over each account
+    let values = [];
+    const accounts = await Promise.all(
+      userAccounts.map(async (account) => {
+        // get user (owner for the account)
+        const zaboUser = await Account.findByPk(account.id, {
+          include: User,
+        });
+        // getZaboUser object in JSON
+        const zaboUserJSON = zaboUser.toJSON();
+        console.log(zaboUserJSON.User.zaboId, `zaboUserId`);
+        console.log(zaboUserJSON.zaboId, `ZABO ACCOUNT ID`);
+        const data = await zabo.users.getAccount({
+          userId: zaboUserJSON.User.zaboId,
+          accountId: zaboUserJSON.zaboId,
+        });
+        return data;
+      })
+    );
     console.log(accounts);
     res.json({
       accounts: accounts,

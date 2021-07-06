@@ -1,6 +1,6 @@
 import React from "react";
 import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
-import Input from "../controls/Input";
+import Input from "../Controls/Input";
 
 function FamilyMemberInputs() {
   const { additionalFamilyMember, setAdditionalFamilyMember } =

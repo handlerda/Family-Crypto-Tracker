@@ -11,6 +11,7 @@ import {
   ViewGridAddIcon,
   XIcon,
 } from "@heroicons/react/outline";
+import Account from "./Account";
 
 const user = {
   name: "Debbie Lewis",
@@ -70,7 +71,9 @@ export default function Settings() {
                 ))}
               </nav>
             </aside>
-            <h1>Content goes here</h1>
+            <div className="divide-y divide-gray-200 lg:col-span-9 pl-5 pt-5">
+              <Account />
+            </div>
           </div>
         </div>
       </div>

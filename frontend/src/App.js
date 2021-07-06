@@ -5,20 +5,27 @@ import SignupFormPage from "./components/SignupFormPage";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import LoginForm from "./components/LoginFormModal/LoginForm";
-import ZaboPopup from "./components/controls/ZaboPopup";
+import ZaboPopup from "./components/Controls/ZaboPopup";
 import Settings from "./components/Settings";
-import { getWallet, getWallets } from "./store/wallet";
+import { getAccounts } from "./store/account";
+import Table from "./components/Table";
+import Header from "../src/components/Controls/Header";
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
+  const [accountsLoaded, setAccountsLoaded] = useState(false);
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
-  async function handleClick(e) {
-    const data = await dispatch(getWallets());
-    console.log(data);
-  }
+  useEffect(() => {
+    dispatch(getAccounts()).then(() => setAccountsLoaded(true));
+  }, [dispatch]);
+
+  // async function handleClick(e) {
+  //   const data = await dispatch(getAccounts());
+  //   console.log(data);
+  // }
 
   return (
     <>
@@ -27,9 +34,20 @@ function App() {
           <Navigation isLoaded={isLoaded} />
           <Switch>
             <Route path="/" exact>
-              <div>
-                <h1>Hello world</h1>
-                <button onClick={handleClick}>Test</button>
+              <div className="flex flex-col">
+                <div>
+                  <h1>Hello world</h1>
+                  {/* <button onClick={handleClick}>Test</button> */}
+                </div>
+                <div className=" content-end">
+                  <div className="mt-auto">
+                    <Header
+                      title="Wallets"
+                      details="The below chart shows all wallets you have access to"
+                    ></Header>
+                    {accountsLoaded && <Table />}
+                  </div>
+                </div>
               </div>
             </Route>
             <Route path="/sign-up" exact>

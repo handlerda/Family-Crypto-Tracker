@@ -4,13 +4,13 @@ import { Link, Redirect } from "react-router-dom";
 import * as sessionActions from "../../store/session";
 
 import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
-import Input from "../controls/Input";
+import Input from "../Controls/Input";
 import FamilyMemberInputs from "./FamilyMembersInputs";
-import Popup from "../controls/Popup";
+import Popup from "../Controls/Popup";
 import { Dialog } from "@headlessui/react";
 import { CheckIcon } from "@heroicons/react/outline";
-import FamilyMemberCounter from "../controls/FamilyMemberCounter";
-import Toggle from "../controls/Toggle";
+import FamilyMemberCounter from "../Controls/FamilyMemberCounter";
+import Toggle from "../Controls/Toggle";
 
 function SignupFormPage() {
   const dispatch = useDispatch();
