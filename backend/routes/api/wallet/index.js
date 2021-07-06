@@ -79,12 +79,14 @@ router.post(
     const { id } = req.user.dataValues;
     console.log(req.user);
     const currentUser = await User.findByPk(id);
-    console.log(`here comes current user`, currentUser);
-    await currentUser.addAccount({
+
+    //add authorized account
+    await currentUser.addAuthorizedAccount({
       userId: id,
       zaboId: zaboAccountObject.id,
       provider: zaboAccountObject.provider.name,
     });
+    await currentUser.save();
     console.log(currentUser);
     await currentUser.save();
     res.json({
@@ -94,3 +96,6 @@ router.post(
 );
 
 module.exports = router;
+
+// add authorizedAccount model
+//npx sequelize model:generate --AuthorizedAccount
