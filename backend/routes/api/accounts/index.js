@@ -131,12 +131,15 @@ router.get(
         });
         // getZaboUser object in JSON
         const zaboUserJSON = zaboUser.toJSON();
+        console.log(zaboUserJSON);
         console.log(zaboUserJSON.User.zaboId, `zaboUserId`);
         console.log(zaboUserJSON.zaboId, `ZABO ACCOUNT ID`);
         const data = await zabo.users.getAccount({
           userId: zaboUserJSON.User.zaboId,
           accountId: zaboUserJSON.zaboId,
         });
+        data.userId = zaboUserJSON.User.id;
+        data.firstName = zaboUserJSON.User.firstName;
         return data;
       })
     );

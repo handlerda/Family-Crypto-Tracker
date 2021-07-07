@@ -40,10 +40,7 @@ function App() {
                 </div>
                 <div className=" content-end">
                   <div className="mt-auto">
-                    <Header
-                      title="Wallets"
-                      details="The below chart shows all wallets you have access to"
-                    ></Header>
+                    <Header title="Wallets"></Header>
                     {accountsLoaded && <Table />}
                   </div>
                 </div>

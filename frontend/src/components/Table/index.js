@@ -1,6 +1,12 @@
 import { useSelector } from "react-redux";
 
-const headers = ["Account", "Blockchain", "Amount", "Dollar Amount"];
+const headers = [
+  "Account",
+  "Blockchain",
+  "Amount",
+  "Dollar Amount",
+  "Account Owner",
+];
 
 export default function Table() {
   const accounts = useSelector((state) => state.account.accounts);
@@ -45,6 +51,9 @@ export default function Table() {
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                               {balance.fiat_value || "N/A"}
+                            </td>
+                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                              {account.firstName}
                             </td>
                           </tr>
                         );
