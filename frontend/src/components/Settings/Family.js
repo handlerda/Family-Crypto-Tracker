@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Header from "../Controls/Header";
+import Input from "../Controls/Input";
 import Popup from "../Controls/Popup";
 import FamilyMemberInputs from "../SignupFormPage/FamilyMembersInputs";
-
+import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
+import { useDispatch, useSelector } from "react-redux";
+import { addNewFamilyMember, getFamilyMembers } from "../../store/session";
 const people = [
   {
     name: "Calvin Hawkins",
@@ -25,8 +28,42 @@ const people = [
 ];
 
 function Family() {
-  const [showNewMembers, setShowNewMembers] = useState(false);
+  const [password, setPassword] = useState("");
+  const { additionalFamilyMember, setAdditionalFamilyMember } =
+    useAddFamilyMemberSignUp();
+  const dispatch = useDispatch();
+  const familyMembers = useSelector((state) => state.session);
+  
+  const [familyMembersLoaded, setFamilyMembersLoaded] = useState(false);
+  const [errors, setErrors] = useState([]);
+  async function addNewFamilyMemberClick(e) {
+    e.preventDefault();
+    // add password to additionalFamilyMember payload
+    additionalFamilyMember["password"] = password;
 
+    // add new member to database
+    const data = await dispatch(addNewFamilyMember(additionalFamilyMember));
+    //clear the input field
+    if (!data.errors) {
+      setAdditionalFamilyMember({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+      });
+    } else {
+      setErrors(data.errors);
+    }
+    console.log(data);
+  }
+
+  useEffect(() => {
+    (async () => {
+      await dispatch(getFamilyMembers());
+      setFamilyMembersLoaded(true);
+    })();
+  }, [dispatch]);
+  console.log(familyMembers);
   return (
     <div>
       <div className="md:flex md:items-center md:justify-between">
@@ -36,19 +73,28 @@ function Family() {
           </h2>
         </div>
       </div>
-      <ul className="divide-y divide-gray-200 mt-5">
-        {people.map((person) => (
-          <li key={person.email} className="py-4 flex">
-            <div>
-              <p className="text-sm font-medium text-gray-900">{person.name}</p>
-              <p className="text-sm text-gray-500">{person.email}</p>
-              <button className="bg-red-500 px-2 rounded-md text-white mt-5">
-                Delete
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+      {familyMembersLoaded && (
+        <ul className="divide-y divide-gray-200 mt-5">
+          {familyMembers.familyMembers.users.map((member) => (
+            <li key={member.id} className="py-4 flex">
+              <div>
+                <p className="text-sm font-medium text-gray-900">
+                  {`${member.firstName} ${member.lastName}`}
+                </p>
+                <p className="text-sm text-gray-500">{member.phone}</p>
+                <p className="text-sm text-gray-500">
+                  {member.headOfHouseHold
+                    ? `head of household`
+                    : `family member`}
+                </p>
+                {familyMembers.user. <button className="bg-red-500 px-2 rounded-md text-white mt-5">
+                  Delete
+                </button>
+              </div>}
+            </li>
+          ))}
+        </ul>
+      )}
       <div className="py-5">
         <Header
           title="Add a new family member"
@@ -56,6 +102,21 @@ function Family() {
         />
       </div>
       <FamilyMemberInputs />
+      <Input
+        label="Family password"
+        type="text"
+        value={password}
+        handleChange={(e) => setPassword(e.target.value)}
+        css="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
+      />
+      <button onClick={addNewFamilyMemberClick}>Add</button>
+      {errors && (
+        <ul>
+          {errors.map((error) => {
+            return <li>{error}</li>;
+          })}
+        </ul>
+      )}
     </div>
   );
 }

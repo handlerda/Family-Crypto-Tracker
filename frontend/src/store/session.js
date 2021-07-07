@@ -1,7 +1,10 @@
 import { csrfFetch } from "./csrf";
-
+// calls the household api (when new account)
 const SET_USER = "session/setUser";
+// calls the user api (adds a user associated with an account)
+const ADD_USER = "session/addUser";
 const REMOVE_USER = "session/removeUser";
+const GET_USERS = "session/getUsers";
 
 const setUser = (user) => {
   return {
@@ -10,9 +13,23 @@ const setUser = (user) => {
   };
 };
 
+const addUser = (user) => {
+  return {
+    type: ADD_USER,
+    payload: user,
+  };
+};
+
 const removeUser = () => {
   return {
     type: REMOVE_USER,
+  };
+};
+
+const getUsers = (users) => {
+  return {
+    type: GET_USERS,
+    payload: users,
   };
 };
 //login thunk
@@ -38,6 +55,7 @@ export const restoreUser = () => async (dispatch) => {
 };
 
 //signup thunk
+//calls the household api
 export const signup =
   (
     firstName,
@@ -49,7 +67,7 @@ export const signup =
     familyPassword
   ) =>
   async (dispatch) => {
-    const response = await csrfFetch("/api/users", {
+    const response = await csrfFetch("/api/households", {
       method: "POST",
       body: JSON.stringify({
         firstName,
@@ -67,6 +85,16 @@ export const signup =
     return response;
   };
 
+export const addNewFamilyMember = (member) => async (dispatch) => {
+  const response = await csrfFetch("/api/users", {
+    method: "POST",
+    body: JSON.stringify(member),
+  });
+  const data = await response.json();
+  dispatch(addUser(data));
+  return data;
+};
+
 //logout thunk
 export const logout = () => async (dispatch) => {
   const response = await csrfFetch("/api/session", {
@@ -74,6 +102,14 @@ export const logout = () => async (dispatch) => {
   });
   dispatch(removeUser());
   return response;
+};
+
+export const getFamilyMembers = () => async (dispatch) => {
+  const response = await csrfFetch("/api/users");
+  const data = await response.json();
+  dispatch(getUsers(data));
+  console.log(`here comes data`, data);
+  return data;
 };
 
 const initialState = { user: null };
@@ -88,6 +124,14 @@ const sessionReducer = (state = initialState, action) => {
     case REMOVE_USER:
       newState = Object.assign({}, state);
       newState.user = null;
+      return newState;
+    case ADD_USER:
+      newState = Object.assign({}, state);
+      newState.newFamilyMember = action.payload;
+      return newState;
+    case GET_USERS:
+      newState = Object.assign({}, state);
+      newState.familyMembers = action.payload;
       return newState;
     default:
       return state;
