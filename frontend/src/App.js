@@ -8,7 +8,8 @@ import LoginForm from "./components/LoginFormModal/LoginForm";
 import Settings from "./components/Settings";
 import { getAccounts } from "./store/account";
 import Table from "./components/Table";
-import Header from "../src/components/Controls/Header";
+import Header from "./components/Controls/Header";
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
