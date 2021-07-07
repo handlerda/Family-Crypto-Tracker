@@ -5,6 +5,7 @@ const SET_USER = "session/setUser";
 const ADD_USER = "session/addUser";
 const REMOVE_USER = "session/removeUser";
 const GET_USERS = "session/getUsers";
+const DELETE_USER = "session/deleteUser";
 
 const setUser = (user) => {
   return {
@@ -32,6 +33,14 @@ const getUsers = (users) => {
     payload: users,
   };
 };
+
+const deleteUser = (user) => {
+  return {
+    type: DELETE_USER,
+    payload: user,
+  };
+};
+
 //login thunk
 export const login = (user) => async (dispatch) => {
   const { credential, password } = user;
@@ -95,6 +104,15 @@ export const addNewFamilyMember = (member) => async (dispatch) => {
   return data;
 };
 
+export const deleteFamilyMember = (memberId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/users/${memberId}`, {
+    method: "DELETE",
+  });
+  const data = await response.json();
+  dispatch(deleteUser(data));
+  return data;
+};
+
 //logout thunk
 export const logout = () => async (dispatch) => {
   const response = await csrfFetch("/api/session", {
@@ -132,6 +150,10 @@ const sessionReducer = (state = initialState, action) => {
     case GET_USERS:
       newState = Object.assign({}, state);
       newState.familyMembers = action.payload;
+      return newState;
+    case DELETE_USER:
+      newState = Object.assign({}, state);
+      newState.deletedFamilyMember = action.payload;
       return newState;
     default:
       return state;

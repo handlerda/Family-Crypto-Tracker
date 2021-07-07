@@ -44,7 +44,7 @@ export const getAccounts = () => async (dispatch) => {
 
 //ADD WALLETS
 export const addAccount = (userId, zaboAccountObject) => async (dispatch) => {
-  const response = await csrfFetch(`/api/account`, {
+  const response = await csrfFetch(`/api/accounts`, {
     // send Zabo account id and Crypfam userId in body
     method: "POST",
     body: JSON.stringify({ zaboAccountObject, userId }),
@@ -58,7 +58,7 @@ export const addAccount = (userId, zaboAccountObject) => async (dispatch) => {
 export const deleteAccount =
   (userId = null, accountId) =>
   async (dispatch) => {
-    const response = await csrfFetch(`/api/account`, {
+    const response = await csrfFetch(`/api/accounts`, {
       // send Zabo account id and Crypfam userId in body (userId can be null)
       method: "DELETE",
       body: JSON.stringify({ accountId, userId }),

@@ -5,27 +5,11 @@ import Popup from "../Controls/Popup";
 import FamilyMemberInputs from "../SignupFormPage/FamilyMembersInputs";
 import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
 import { useDispatch, useSelector } from "react-redux";
-import { addNewFamilyMember, getFamilyMembers } from "../../store/session";
-const people = [
-  {
-    name: "Calvin Hawkins",
-    email: "calvin.hawkins@example.com",
-    image:
-      "https://images.unsplash.com/photo-1491528323818-fdd1faba62cc?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    name: "Kristen Ramos",
-    email: "kristen.ramos@example.com",
-    image:
-      "https://images.unsplash.com/photo-1550525811-e5869dd03032?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-  {
-    name: "Ted Fox",
-    email: "ted.fox@example.com",
-    image:
-      "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80",
-  },
-];
+import {
+  addNewFamilyMember,
+  deleteFamilyMember,
+  getFamilyMembers,
+} from "../../store/session";
 
 function Family() {
   const [password, setPassword] = useState("");
@@ -33,7 +17,7 @@ function Family() {
     useAddFamilyMemberSignUp();
   const dispatch = useDispatch();
   const familyMembers = useSelector((state) => state.session);
-  
+
   const [familyMembersLoaded, setFamilyMembersLoaded] = useState(false);
   const [errors, setErrors] = useState([]);
   async function addNewFamilyMemberClick(e) {
@@ -51,18 +35,29 @@ function Family() {
         email: "",
         phone: "",
       });
-    } else {
+    }
+    // set errors
+    else {
       setErrors(data.errors);
     }
     console.log(data);
   }
 
+  function deleteUser(id) {
+    // delete the user
+    const response = dispatch(deleteFamilyMember(id));
+    return response;
+  }
+
+  //want to call if an add or subtract opp happens
   useEffect(() => {
-    (async () => {
-      await dispatch(getFamilyMembers());
-      setFamilyMembersLoaded(true);
-    })();
-  }, [dispatch]);
+    if (!familyMembersLoaded) {
+      (async () => {
+        await dispatch(getFamilyMembers());
+        setFamilyMembersLoaded(true);
+      })();
+    }
+  }, [dispatch, familyMembersLoaded]);
   console.log(familyMembers);
   return (
     <div>
@@ -79,18 +74,34 @@ function Family() {
             <li key={member.id} className="py-4 flex">
               <div>
                 <p className="text-sm font-medium text-gray-900">
+                  <span className="font-bold"> Name: </span>
                   {`${member.firstName} ${member.lastName}`}
                 </p>
-                <p className="text-sm text-gray-500">{member.phone}</p>
                 <p className="text-sm text-gray-500">
-                  {member.headOfHouseHold
-                    ? `head of household`
-                    : `family member`}
+                  <span className="font-bold text-gray-600">
+                    Phone number:{" "}
+                  </span>
+                  {member.phone}
                 </p>
-                {familyMembers.user. <button className="bg-red-500 px-2 rounded-md text-white mt-5">
-                  Delete
-                </button>
-              </div>}
+                <p className="text-sm text-gray-500">
+                  <span className="font-bold text-gray-600">
+                    Family status:{" "}
+                  </span>
+
+                  {member.headOfHouseHold
+                    ? `Head of household`
+                    : `Family member`}
+                </p>
+                {familyMembers.user.headOfHouseHold &&
+                  familyMembers.user.id !== member.id && (
+                    <button
+                      className="inline-flex items-center px-4 mt-5 py-1 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
+                      onClick={() => deleteUser(member.id)}
+                    >
+                      Delete
+                    </button>
+                  )}
+              </div>
             </li>
           ))}
         </ul>
@@ -109,7 +120,12 @@ function Family() {
         handleChange={(e) => setPassword(e.target.value)}
         css="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-purple-500 focus:border-purple-500 sm:text-sm"
       />
-      <button onClick={addNewFamilyMemberClick}>Add</button>
+      <button
+        onClick={addNewFamilyMemberClick}
+        className="inline-flex items-center px-4 mt-5 py-1 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+      >
+        Add
+      </button>
       {errors && (
         <ul>
           {errors.map((error) => {
