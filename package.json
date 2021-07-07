@@ -8,8 +8,5 @@
   },
   "name": "crypfam",
   "version": "0.0.1",
-  "main": "index.js",
-  "dependencies": {
-    "zabo-sdk-js": "^1.3.2"
-  }
+  "main": "app.js"
 }
