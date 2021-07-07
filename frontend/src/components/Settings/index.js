@@ -12,6 +12,8 @@ import {
   XIcon,
 } from "@heroicons/react/outline";
 import Account from "./Account";
+import Family from "./Family";
+import accountReducer from "../../store/account";
 
 const user = {
   name: "Debbie Lewis",
@@ -21,22 +23,51 @@ const user = {
     "https://images.unsplash.com/photo-1517365830460-955ce3ccd263?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=4&w=320&h=320&q=80",
 };
 
-const subNavigation = [
-  { name: "Account", icon: CogIcon, current: false },
-  { name: "Family", icon: UserCircleIcon, current: false },
-  { name: "Password", icon: KeyIcon, current: false },
-  { name: "Billing", icon: CreditCardIcon, current: false },
-];
-
 function classNames(...classes) {
   return classes.filter(Boolean).join(" ");
 }
 
 export default function Settings() {
-  const [availableToHire, setAvailableToHire] = useState(true);
-  const [privateAccount, setPrivateAccount] = useState(false);
-  const [allowCommenting, setAllowCommenting] = useState(true);
-  const [allowMentions, setAllowMentions] = useState(true);
+  const [accountActive, setAccountActive] = useState(true);
+  const [familyActive, setFamilyActive] = useState(false);
+  const [passwordActive, setPasswordActive] = useState(false);
+  const [billingActive, setBillingActive] = useState(false);
+
+  const subNavigation = [
+    {
+      name: "Account",
+      icon: CogIcon,
+      setActive: setAccountActive,
+      active: accountActive,
+    },
+    {
+      name: "Family",
+      icon: UserCircleIcon,
+      setActive: setFamilyActive,
+      active: familyActive,
+    },
+    {
+      name: "Password",
+      icon: KeyIcon,
+      setActive: setPasswordActive,
+      active: passwordActive,
+    },
+    {
+      name: "Billing",
+      icon: CreditCardIcon,
+      setActive: setBillingActive,
+      active: billingActive,
+    },
+  ];
+
+  function setActive(e, item) {
+    e.preventDefault();
+    subNavigation.forEach((item) => {
+      console.log(item);
+      item.setActive(false);
+    });
+    item.setActive(true);
+  }
 
   return (
     <div>
@@ -46,9 +77,9 @@ export default function Settings() {
             <aside className="py-6 lg:col-span-3">
               <nav className="space-y-1">
                 {subNavigation.map((item) => (
-                  <a
+                  <button
                     key={item.name}
-                    href={item.href}
+                    onClick={(e) => setActive(e, item)}
                     className={classNames(
                       item.current
                         ? "bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700"
@@ -67,12 +98,17 @@ export default function Settings() {
                       aria-hidden="true"
                     />
                     <span className="truncate">{item.name}</span>
-                  </a>
+                  </button>
                 ))}
               </nav>
             </aside>
             <div className="divide-y divide-gray-200 lg:col-span-9 pl-5 pt-5">
-              <Account />
+              {console.log(`what is active`, accountActive)}
+              {accountActive && <Account />}
+              {familyActive && <Family />}
+              {passwordActive && <h1>Hellow</h1>}
+              {/* <Account />
+              <Family /> */}
             </div>
           </div>
         </div>

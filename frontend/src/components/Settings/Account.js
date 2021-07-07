@@ -9,7 +9,6 @@ function Account() {
         title="Change account settings"
         details="Here you can change account settings"
       />
-      <form></form>
     </div>
   );
 }
