@@ -10,7 +10,7 @@ import { PlusIcon } from "@heroicons/react/solid";
 import { CogIcon } from "@heroicons/react/solid";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
-import ZaboPopup from "../Controls/ZaboPopup";
+
 //import Zabo from "zabo"
 import Zabo from "zabo-sdk-js";
 import { addAccount } from "../../store/account";

@@ -5,7 +5,6 @@ import SignupFormPage from "./components/SignupFormPage";
 import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import LoginForm from "./components/LoginFormModal/LoginForm";
-import ZaboPopup from "./components/Controls/ZaboPopup";
 import Settings from "./components/Settings";
 import { getAccounts } from "./store/account";
 import Table from "./components/Table";
