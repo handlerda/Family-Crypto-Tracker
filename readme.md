@@ -1,93 +1,76 @@
-# Family Crypto App (Crypfam)
 
-Cyprfam is a free tool that allows families to keep track of different cryptocurrency accounts. Each family is made up of users that can track their crypto accounts regardless of custodian. We even support cold storage wallets such as Trezor and Ledger. In addition, family members can specify what accounts are shared between members. This makes it very easy for parents, legal guardians, and even passionate kiddos to keep track of their crypto securely and easily. 
+# Create React App Template
 
+A no-frills template from which to create React + Redux applications with
+[Create React App](https://github.com/facebook/create-react-app).
 
+```sh
+npx create-react-app my-app --template @appacademy/react-redux-v17 --use-npm
+```
 
-## Database Schema
- * https://dbdiagram.io/d/60da4649dd6a597148239046
+## Available Scripts
 
-# User and API Routes
+In the project directory, you can run:
 
-## `/`
+### `npm start`
 
-This will be the initial page once a user visits the page and is not authenticated. It will be a general spash page with highlights of the app with a detailed navbar. 
+Runs the app in the development mode.\
+Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
+The page will reload if you make edits.\
+You will also see any lint errors in the console.
 
-## Log in page  [wireframe](https://docs.google.com/drawings/d/106fUFYGusX7bkIhtUZgkp4oC3mbhYvLmTzjJ0tOs1a8/edit?usp=sharing)
-This page displays a log in form if the user is not logged in
-* `GET /users/login`
-* `POST /users/login`
-## `/user/new`
-This page displays a signup form.
-### Sign up page [wireframe](https://docs.google.com/drawings/d/1bs42ETQu7M_LnNeivSX1CP0syoWdFo7Zknz56v4rXZw/edit?usp=sharing)
-* `GET /users/new`
-* `POST /api/users/new`
-## Index `/` (If authenticated) [wireframe](https://docs.google.com/drawings/d/1bs42ETQu7M_LnNeivSX1CP0syoWdFo7Zknz56v4rXZw/edit?usp=sharing)
-This page will render the users account balance and associated accounts. This will act as the "home" page when a user has successfully authenticated. If the user was not invited by a family they will also be promted to enter family information. 
-* `GET /api/user` 
-* `GET /api/family` || `POST /api/family`
+### `npm test`
 
+Launches the test runner in the interactive watch mode.\
+See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-## `/family/:id` [wireframe](https://docs.google.com/drawings/d/1bs42ETQu7M_LnNeivSX1CP0syoWdFo7Zknz56v4rXZw/edit?usp=sharing)
-This page display's a list of family accounts and balances. The user can click on associated accounts and users to drill down further. In addition to the navbar and settings tab a series of charts and graphs will display relevant crypto data.
-* `GET /api/family/id`
+### `npm run build`
 
-## `/user/:id` [wireframe](https://docs.google.com/drawings/d/1bs42ETQu7M_LnNeivSX1CP0syoWdFo7Zknz56v4rXZw/edit?usp=sharing)
-This page display's a list of user accounts and balances. In addition to the navbar this page will also display a list of detailed transactions (regardless of account) 
+Builds the app for production to the `build` folder.\
+It correctly bundles React in production mode and optimizes the build for the best performance.
 
+The build is minified and the filenames include the hashes.\
+Your app is ready to be deployed!
 
-*  ` GET /api/user/:id` 
+See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
 
+### `npm run eject`
 
-## `/account/:familyId/:accountName` [wireframe](https://docs.google.com/drawings/d/14wgVzEIi2y4W0hTMEvls761VfMdy1t4CngfJw8fY_Z0/edit?usp=sharing)
+**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-The user will see the balance and transactional data associated on a per account level on this page. So, for example, if a user wanted to see data from all Coinbase accounts, they would navigate here. The user can also filter by a family member to drill down by user.
+If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
 
-*  `GET /api/account/:familyId/:accountName`
+Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
 
-## `/settings/:userId` [wireframe](https://docs.google.com/drawings/d/10LdqluOp0hf4u4RfTFC0N5vD8oMM-MkrH4W8XVG37eo/edit?usp=sharing)
-Here a user will be able to make changes to their account. The following changes are as follows:
+You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
 
-### If head of household:
- * Change head of household: ` PATCH /api/family/:id`
- * Add user to family: `POST /api/user`
- * Delete the family: `DELETE /api/family/:familyId`
- * Delete family members: `DELETE /api/user/:id`
- * Modify visibility settings:
-    * View visibility settings `GET /api/visibility/family/:familyId`
-    * Edit visibility settings `PATCH /api/visibility/family/:familyId`
-    
+## Learn More
 
-### If not head of household:
- * Delete user account: `DELETE /api/user/:id
- * Get user visibility settings `GET /api/visibility/user/:id`
- * Edit user visibility settings `PATCH /api/visibility/user/:id`
+You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
- 
- # MVP Feature List
+To learn React, check out the [React documentation](https://reactjs.org/).
 
-* Families
-    * Create a new family with a head of household (user)
-    * Delete a family
-    * Allow head of household to move to a different family
-    * Add a new user to the family
-* User 
-    * Allow a user to connect to their different crypto wallets via zabo
-    * Allow a user to modify what accounts/balances / transactions are visible by other family members (head of households will have global access)
-    * Allow a user to delete their account
-    * Allow a user to move to a new family
-* Accounts 
-    * Allow for the head of the household to view all family accounts
-    * Allow for family members to see relevant accounts
-* Balances 
-    * Allow for the head of the household to view all family balances
-    * Allow for family members to see relevant balances
+### Code Splitting
 
-* Transactions
-    * Allow for the head of the household to view all family transactions
-    * Allow for family members to see relevant transactions
+This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
 
+### Analyzing the Bundle Size
 
- 
+This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
 
+### Making a Progressive Web App
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+
+### Advanced Configuration
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+
+### Deployment
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+
+### `npm run build` fails to minify
+
+This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
