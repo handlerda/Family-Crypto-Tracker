@@ -7,6 +7,7 @@ import { csrfFetch } from "./csrf";
 const GET_ACCOUNT = "wallet/getAccount";
 const GET_ACCOUNTS = "wallet/getAccounts";
 const ADD_ACCOUNT = "wallet/addAccount";
+const MODIFY_ACCOUNT = "wallet/modifyAccounts";
 const REMOVE_ACCOUNT = "session/removeAccount";
 
 const thunk = (type, payload) => {
@@ -55,6 +56,18 @@ export const addAccount = (userId, zaboAccountObject) => async (dispatch) => {
   return response;
 };
 
+export const modifyAccountAccess = (payload) => async (dispatch) => {
+  const response = await csrfFetch(`/api/accounts`, {
+    // send Zabo account id and Crypfam userId in body
+    method: "PATCH",
+    //pass in the object as an array to process via Promise.all on the server
+    body: JSON.stringify(Object.values(payload)),
+  });
+  const data = await response.json();
+  dispatch(thunk(MODIFY_ACCOUNT, data));
+  return response;
+};
+
 //ADD WALLETS
 export const deleteAccount = (accountId) => async (dispatch) => {
   const response = await csrfFetch(`/api/accounts/${accountId}`, {
@@ -78,9 +91,11 @@ const accountReducer = (state = initialState, action) => {
       return newState;
     case GET_ACCOUNTS:
       newState = Object.assign({}, state);
-      for (const account in action.payload) {
-        newState.all[action.payload[account].id] = action.payload[0]; // should be the same just a : wimilq4
-      }
+      console.log(action.payload);
+      // for (const account in action.payload) {
+      //   newState.all[action.payload[account].id] = action.payload[0]; // should be the same just a : wimilq4
+      // }
+      newState.all = action.payload;
       return newState;
     case ADD_ACCOUNT:
       newState = Object.assign({}, state);
@@ -92,6 +107,9 @@ const accountReducer = (state = initialState, action) => {
         ...state,
         all: { ...state.all },
       };
+    case MODIFY_ACCOUNT:
+      newState = Object.assign({}, state);
+      newState.modifiedAccounts = action.payload;
     default:
       return state;
   }

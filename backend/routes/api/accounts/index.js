@@ -137,24 +137,34 @@ router.get(
     const accounts = await Promise.all(
       userAccounts.map(async (account) => {
         // get user (owner for the account)
-        const zaboUser = await Account.findByPk(account.id, {
+        const zaboAccount = await Account.findByPk(account.id, {
           include: User,
         });
-        // getZaboUser object in JSON
-        const zaboUserJSON = zaboUser.toJSON();
-        console.log(zaboUserJSON);
-        console.log(zaboUserJSON.User.zaboId, `zaboUserId`);
-        console.log(zaboUserJSON.zaboId, `ZABO ACCOUNT ID`);
+
         const data = await zabo.users.getAccount({
-          userId: zaboUserJSON.User.zaboId,
-          accountId: zaboUserJSON.zaboId,
+          userId: zaboAccount.User.zaboId,
+          accountId: zaboAccount.zaboId,
         });
-        data.userId = zaboUserJSON.User.id;
-        data.firstName = zaboUserJSON.User.firstName;
+
+        // get a list of users who can access
+        const usersWhoCanAccess = await AuthorizedAccountUser.findAll({
+          where: { accountId: account.id },
+        });
+        // loop over those users who can access
+        const users = usersWhoCanAccess.map((user) => {
+          return {
+            id: user.userId,
+          };
+        });
+
+        data.userId = zaboAccount.User.id;
+        data.firstName = zaboAccount.User.firstName;
+        data.accessibleUsers = users;
+        data.crypfamId = account.id;
         return data;
       })
     );
-    console.log(accounts);
+
     res.json({
       accounts: accounts,
     });
@@ -229,6 +239,43 @@ router.delete(
         "You are not the head of household and can not delete the user",
       ];
       return next(err);
+    }
+  })
+);
+
+router.patch(
+  `/`,
+  restoreUser,
+  asyncHandler(async (req, res, next) => {
+    //promise all
+    const items = req.body;
+    console.log(items);
+    try {
+      await Promise.all(
+        items.map((item) => {
+          // do work
+          if (item.status === "add") {
+            // add to the db
+            AuthorizedAccountUser.create({
+              accountId: item.accountId,
+              userId: item.userId,
+            });
+          } else {
+            // remove from db
+            AuthorizedAccountUser.destroy({
+              where: {
+                accountId: item.accountId,
+                userId: item.userId,
+              },
+            });
+          }
+        })
+      );
+      res.json({
+        status: "ok",
+      });
+    } catch (error) {
+      next(error);
     }
   })
 );

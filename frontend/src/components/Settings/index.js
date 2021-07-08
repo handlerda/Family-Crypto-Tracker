@@ -14,6 +14,7 @@ import {
 import Account from "./Account";
 import Family from "./Family";
 import accountReducer from "../../store/account";
+import Password from "./Password";
 
 const user = {
   name: "Debbie Lewis",
@@ -106,7 +107,7 @@ export default function Settings() {
               {console.log(`what is active`, accountActive)}
               {accountActive && <Account />}
               {familyActive && <Family />}
-              {passwordActive && <h1>Hellow</h1>}
+              {passwordActive && <Password />}
               {/* <Account />
               <Family /> */}
             </div>

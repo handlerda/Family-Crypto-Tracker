@@ -1,6 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteAccount } from "../../store/account";
+import { deleteAccount, modifyAccountAccess } from "../../store/account";
 import Header from "../Controls/Header";
 import Input from "../Controls/Input";
 
@@ -11,6 +11,7 @@ function Account() {
     (state) => state.session.familyMembers.users
   );
   console.log(familyMembers);
+  const [userCrud] = useState({});
   const dispatch = useDispatch();
 
   // allows a user to delete or add a wallet
@@ -26,6 +27,32 @@ function Account() {
     console.log(deletedUser);
   }
 
+  function handleUserChange(e, userId, accountId) {
+    if (e.target.checked) {
+      //add user to db
+      userCrud[userId] = {
+        status: "add",
+        accountId,
+        userId,
+      };
+    } else {
+      //remove user from the database
+      console.log(`delete from db`);
+      userCrud[userId] = {
+        status: "delete",
+        accountId,
+        userId,
+      };
+    }
+  }
+
+  function modifyUserAccountAccess(e) {
+    //prevent default
+    e.preventDefault();
+    console.log(userCrud);
+    dispatch(modifyAccountAccess(userCrud));
+  }
+
   return (
     <div>
       <div className="md:flex md:items-center md:justify-between">
@@ -38,11 +65,7 @@ function Account() {
       <ul className="divide-y divide-gray-200">
         {Object.values(accounts).map((account) => (
           <li key={account.id} className="py-8 flex">
-            <img
-              className="h-10 w-30 rounded-full"
-              src={account.provider.logo}
-              alt=""
-            />
+            <img className="h-10 w-30 " src={account.provider.logo} alt="" />
             <div className="ml-10">
               <p className="text-sm font-medium text-gray-900">
                 <span className="font-bold"> Account name: </span>
@@ -82,6 +105,62 @@ function Account() {
 
                 {allowCrud(user, account) && (
                   <div>
+                    <div class="flex items-center">
+                      <div class="max-w-lg space-y-4">
+                        <ul className="divide-y divide-gray-200">
+                          {/* <li key={account.id} className="py-8 flex"> */}
+                          <p className="font-bold text-black mt-5">
+                            Family member access:{" "}
+                          </p>
+                          {familyMembers.map((member) => {
+                            return (
+                              <li className="py-8 flex">
+                                <div class="relative flex items-start">
+                                  <p className="text-sm font-medium text-gray-900">
+                                    First Name: {member.firstName}
+                                  </p>
+
+                                  <div class="flex items-center h-5">
+                                    {!member.headOfHouseHold ? (
+                                      <input
+                                        type="checkbox"
+                                        class="border-gray-300 rounded form-checkbox ml-10"
+                                        defaultChecked={account.accessibleUsers.some(
+                                          (user) => user.id === member.id
+                                        )}
+                                        onChange={(e) =>
+                                          handleUserChange(
+                                            e,
+                                            member.id,
+                                            account.crypfamId
+                                          )
+                                        }
+                                      />
+                                    ) : (
+                                      <input
+                                        type="checkbox"
+                                        class="border-gray-300 rounded form-checkbox ml-10"
+                                        checked={account.accessibleUsers.some(
+                                          (user) => user.id === member.id
+                                        )}
+                                      />
+                                    )}
+                                  </div>
+                                </div>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                        <div className="flex flex-row mt-5 ">
+                          <button
+                            className="inline-flex items-center px-4  border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-purple-600 hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-purple-500"
+                            onClick={(e) => modifyUserAccountAccess(e)}
+                          >
+                            Modify user permissions
+                          </button>
+                        </div>
+                      </div>
+                    </div>
                     <div className="flex flex-row mt-5 ">
                       <button
                         className="inline-flex items-center px-4  border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
@@ -96,29 +175,6 @@ function Account() {
                         account removes the link from Crypfam to your wallet(s).
                         This action will not effect your crypto.
                       </p>
-                    </div>
-                    <div class="flex items-center">
-                      <div class="max-w-lg space-y-4">
-                        {familyMembers.map((member) => {
-                          return (
-                            <div class="relative flex items-start">
-                              <label class="ml-3 block text-sm font-medium text-gray-700">
-                                {member.firstName}
-                              </label>
-                              <div class="flex items-center h-5">
-                                <input
-                                  type="checkbox"
-                                  class="border-gray-300 rounded form-checkbox ml-10"
-                                  defaultChecked={
-                                    member.headOfHouseHold === true
-                                  }
-                                  check
-                                />
-                              </div>
-                            </div>
-                          );
-                        })}
-                      </div>
                     </div>
                   </div>
                 )}
