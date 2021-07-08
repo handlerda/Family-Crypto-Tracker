@@ -50,15 +50,15 @@ function Family() {
   }
 
   //want to call if an add or subtract opp happens
-  useEffect(() => {
-    if (!familyMembersLoaded) {
-      (async () => {
-        await dispatch(getFamilyMembers());
-        setFamilyMembersLoaded(true);
-      })();
-    }
-  }, [dispatch, familyMembersLoaded]);
-  console.log(familyMembers);
+  //   useEffect(() => {
+  //     if (!familyMembersLoaded) {
+  //       (async () => {
+  //         await dispatch(getFamilyMembers());
+  //         setFamilyMembersLoaded(true);
+  //       })();
+  //     }
+  //   }, [dispatch, familyMembersLoaded]);
+  //   console.log(familyMembers);
   return (
     <div>
       <div className="md:flex md:items-center md:justify-between">
@@ -68,7 +68,7 @@ function Family() {
           </h2>
         </div>
       </div>
-      {familyMembersLoaded && (
+      {
         <ul className="divide-y divide-gray-200 mt-5">
           {familyMembers.familyMembers.users.map((member) => (
             <li key={member.id} className="py-4 flex">
@@ -105,7 +105,7 @@ function Family() {
             </li>
           ))}
         </ul>
-      )}
+      }
       <div className="py-5">
         <Header
           title="Add a new family member"

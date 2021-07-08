@@ -10,7 +10,6 @@ module.exports = {
       },
       zaboId: {
         type: Sequelize.STRING,
-        unique: true,
         allowNull: false,
       },
       userId: {

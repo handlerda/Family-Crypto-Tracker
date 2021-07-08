@@ -56,20 +56,18 @@ export const addAccount = (userId, zaboAccountObject) => async (dispatch) => {
 };
 
 //ADD WALLETS
-export const deleteAccount =
-  (userId = null, accountId) =>
-  async (dispatch) => {
-    const response = await csrfFetch(`/api/accounts`, {
-      // send Zabo account id and Crypfam userId in body (userId can be null)
-      method: "DELETE",
-      body: JSON.stringify({ accountId, userId }),
-    });
-    const data = await response.json();
-    dispatch(thunk(REMOVE_ACCOUNT, data.wallet));
-    return response;
-  };
+export const deleteAccount = (accountId) => async (dispatch) => {
+  const response = await csrfFetch(`/api/accounts/${accountId}`, {
+    // send Zabo account id and Crypfam userId in body (userId can be null)
+    method: "DELETE",
+  });
+  const data = await response.json();
+  console.log(data);
+  dispatch(thunk(REMOVE_ACCOUNT, data.accountId));
+  return response;
+};
 
-const initialState = { wallet: null, all: [] };
+const initialState = { wallet: null, all: {} };
 
 const accountReducer = (state = initialState, action) => {
   let newState;
@@ -80,16 +78,20 @@ const accountReducer = (state = initialState, action) => {
       return newState;
     case GET_ACCOUNTS:
       newState = Object.assign({}, state);
-      newState.all = action.payload;
+      for (const account in action.payload) {
+        newState.all[action.payload[account].id] = action.payload[0]; // should be the same just a : wimilq4
+      }
       return newState;
     case ADD_ACCOUNT:
       newState = Object.assign({}, state);
       newState.addedAccount = action.payload;
       return newState;
     case REMOVE_ACCOUNT:
-      newState = Object.assign({}, state);
-      newState.removedAccount = action.payload;
-      return newState;
+      delete state.all[action.payload];
+      return {
+        ...state,
+        all: { ...state.all },
+      };
     default:
       return state;
   }

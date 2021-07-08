@@ -14,6 +14,7 @@ function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
   const [accountsLoaded, setAccountsLoaded] = useState(false);
+  const [familyMembersLoaded, setFamilyMembersLoaded] = useState();
   useEffect(() => {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
@@ -22,10 +23,26 @@ function App() {
     dispatch(getAccounts()).then(() => setAccountsLoaded(true));
   }, [dispatch]);
 
+  useEffect(() => {
+    dispatch(sessionActions.getFamilyMembers()).then(() =>
+      setFamilyMembersLoaded(true)
+    );
+  }, [dispatch]);
+
   // async function handleClick(e) {
   //   const data = await dispatch(getAccounts());
   //   console.log(data);
   // }
+
+  // \  //want to call if an add or subtract opp happens
+  // useEffect(() => {
+  //   if (!familyMembersLoaded) {
+  //     (async () => {
+  //       await dispatch(getFamilyMembers());
+  //       setFamilyMembersLoaded(true);
+  //     })();
+  //   }
+  // }, [dispatch, familyMembersLoaded]);
 
   return (
     <>

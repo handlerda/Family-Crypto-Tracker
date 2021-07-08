@@ -4,7 +4,11 @@ const asyncHandler = require("express-async-handler");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
-const { setTokenCookie, requireAuth } = require("../../utils/auth");
+const {
+  setTokenCookie,
+  requireAuth,
+  restoreUser,
+} = require("../../utils/auth");
 const { User, Family } = require("../../db/models");
 const { Op } = require("sequelize");
 const sendTxtMsg = require("../twilio");
@@ -86,7 +90,7 @@ const addFamilyHeadHouseHold = asyncHandler(async (req, res, next) => {
 
 // Sign up
 router.post(
-  "/household",
+  "/",
   validateSignup,
   addFamilyHeadHouseHold,
   asyncHandler(async (req, res) => {

@@ -166,18 +166,51 @@ router.delete(
   restoreUser,
   asyncHandler(async (req, res, next) => {
     // get user that needs to be deleted
-    const accountToBeDeleted = req.params.accountId;
+    const accountToBeDeletedId = req.params.accountId;
     // check if the user is head of household
-    const isHeadOfHouseHold = req.user.toJSON().headOfHouseHold;
+    const isHeadOfHouseHold = req.user.headOfHouseHold;
+    const userId = req.user.id;
+
+    // get accountToBeDeleted
+    const accountToBeDeleted = await Account.findOne({
+      where: { zaboId: accountToBeDeletedId },
+      include: User,
+    });
+
     // we can delete
-    if (isHeadOfHouseHold) {
+    if (isHeadOfHouseHold || accountToBeDeleted.userId === userId) {
       try {
-        //delete the user
-        await Account.destroy({ where: { id: accountToBeDeleted } });
-        // return the deleted user status
+        // Initialize Zabo Object
+        const zabo = await Zabo.init({
+          apiKey: process.env.ZABO_PUBLIC_KEY,
+          secretKey: process.env.ZABO_PRIVATE_KEY,
+          env: "sandbox",
+        });
+
+        // delete the zabo account
+        await zabo.users.removeAccount({
+          userId: accountToBeDeleted.User.zaboId,
+          accountId: accountToBeDeletedId,
+        });
+
+        // query all references from the junction table
+        const accountsOnJoinTable = await AuthorizedAccountUser.findAll({
+          where: {
+            accountId: accountToBeDeleted.id, // gets
+          },
+        });
+        // remove all references from the joins table
+        await Promise.all(
+          accountsOnJoinTable.map((account) => {
+            account.destroy();
+          })
+        );
+        // delete the zaboAccount from the database
+        await accountToBeDeleted.destroy();
+        // return the payload
         res.json({
           deleted: true,
-          userId: userToBeDeleted,
+          accountId: accountToBeDeletedId,
         });
       } catch (error) {
         // return the error
@@ -188,7 +221,7 @@ router.delete(
     else {
       // return the error back to the client
       const err = new Error(
-        "You are not the head of household and can not delete the user"
+        "You are not the head of household or do not own this account. The account can not be deleted"
       );
       err.status = 401;
       err.title = "Delete failed";

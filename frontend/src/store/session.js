@@ -130,7 +130,7 @@ export const getFamilyMembers = () => async (dispatch) => {
   return data;
 };
 
-const initialState = { user: null };
+const initialState = { user: null, familyMembers: [] };
 
 const sessionReducer = (state = initialState, action) => {
   let newState;
