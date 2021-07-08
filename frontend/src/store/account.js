@@ -37,7 +37,8 @@ export const getAccounts = () => async (dispatch) => {
 
   const response = await csrfFetch(`/api/accounts`);
   const data = await response.json();
-  dispatch(thunk(GET_ACCOUNTS, data));
+  const { accounts } = data;
+  dispatch(thunk(GET_ACCOUNTS, accounts));
 };
 
 // take in array of accountIds
@@ -68,7 +69,7 @@ export const deleteAccount =
     return response;
   };
 
-const initialState = { wallet: null };
+const initialState = { wallet: null, all: [] };
 
 const accountReducer = (state = initialState, action) => {
   let newState;
@@ -79,7 +80,7 @@ const accountReducer = (state = initialState, action) => {
       return newState;
     case GET_ACCOUNTS:
       newState = Object.assign({}, state);
-      newState.accounts = action.payload;
+      newState.all = action.payload;
       return newState;
     case ADD_ACCOUNT:
       newState = Object.assign({}, state);

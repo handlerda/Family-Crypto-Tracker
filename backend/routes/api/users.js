@@ -4,11 +4,14 @@ const asyncHandler = require("express-async-handler");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
-const { setTokenCookie, requireAuth } = require("../../utils/auth");
+const {
+  setTokenCookie,
+  requireAuth,
+  restoreUser,
+} = require("../../utils/auth");
 const { User, Family } = require("../../db/models");
 const { Op } = require("sequelize");
 const sendTxtMsg = require("../twilio");
-
 const router = express.Router();
 
 const validateSignup = [
@@ -26,40 +29,92 @@ const validateSignup = [
   handleValidationErrors,
 ];
 
-// Sign up
+// add a user
 router.post(
   "/",
+  restoreUser,
   validateSignup,
-  asyncHandler(async (req, res) => {
-    const { familyMembers, familyPassword } = req.body;
-
-    // check if family members
-    if (familyMembers.length) {
-      await Promise.all([
-        familyMembers.map((member) => {
-          // sign family members up
-          User.signup({
-            ...member,
-            password: familyPassword,
-            familyId: family.id,
-            headOfHouseHold: false,
-          });
-          // call twilio helper function
-          sendTxtMsg(
-            `Welcome to Crypfam ${member.firstName} 🎉 your password is: ${familyPassword}`,
-            member.phone
-          );
-        }),
-      ]);
+  asyncHandler(async (req, res, next) => {
+    try {
+      const familyId = req.user.toJSON().familyId;
+      const newUser = req.body;
+      const user = await User.signup({
+        ...newUser,
+        familyId: familyId,
+        headOfHouseHold: false,
+      });
+      res.status(201);
+      res.json({ added: user.toJSON() });
+    } catch (error) {
+      console.log(`was an error thrown`);
+      next(error);
     }
-    //login the head of household
-    await setTokenCookie(res, headHouseHold);
-    return res.json({
-      headHouseHold,
-    });
   })
 );
 
-router.post("/");
+// get all users associated with a family
+router.get(
+  "/",
+  restoreUser,
+  asyncHandler(async (req, res, next) => {
+    try {
+      const familyId = req.user.toJSON().familyId;
+      console.log(req.user.toJSON());
+      const userPayload = await User.findAll({
+        where: { familyId: familyId },
+      });
+      console.log(userPayload, `here comes the user payload`);
+      const users = userPayload.map((user) => {
+        console.log(user.toJSON());
+        return user.toJSON();
+      });
+      console.log(users);
+      res.json({
+        users,
+      });
+    } catch (error) {
+      next(error);
+    }
+  })
+);
+
+router.delete(
+  "/:userId",
+  restoreUser,
+  asyncHandler(async (req, res, next) => {
+    // get user that needs to be deleted
+    const userToBeDeleted = req.params.userId;
+    // check if the user is head of household
+    const isHeadOfHouseHold = req.user.toJSON().headOfHouseHold;
+    // we can delete
+    if (isHeadOfHouseHold) {
+      try {
+        //delete the user
+        await User.destroy({ where: { id: userToBeDeleted } });
+        // return the deleted user status
+        res.json({
+          deleted: true,
+          userId: userToBeDeleted,
+        });
+      } catch (error) {
+        // return the error
+        next(error);
+      }
+    }
+    // the user can not delete because they are not head of household
+    else {
+      // return the error back to the client
+      const err = new Error(
+        "You are not the head of household and can not delete the user"
+      );
+      err.status = 401;
+      err.title = "Delete failed";
+      err.errors = [
+        "You are not the head of household and can not delete the user",
+      ];
+      return next(err);
+    }
+  })
+);
 
 module.exports = router;

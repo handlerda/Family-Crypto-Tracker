@@ -4,9 +4,10 @@ import Header from "../Controls/Header";
 import Input from "../Controls/Input";
 
 function Account() {
-  const accounts = useSelector((state) => state.account.accounts.accounts);
+  const accounts = useSelector((state) => state.account.all);
   const user = useSelector((state) => state.session.user);
 
+  console.log(`here comes the accounts`, accounts);
   function showDelete(user, account) {
     if (user.headOfHouseHold) return true;
     if (user.id === account.userId) return true;

@@ -73,9 +73,10 @@ router.post(
   restoreUser,
   isZaboUser,
   asyncHandler(async (req, res, next) => {
+    console.log(req);
     try {
       const { zaboAccountObject } = req.body;
-      const { id } = req.user.dataValues;
+      const { id, familyId, headOfHouseHold } = req.user.dataValues;
       // initialize zabo object
 
       //create new account
@@ -89,6 +90,16 @@ router.post(
         userId: id,
         accountId: newAccount.id,
       });
+      // if user is not account owner add to junction table
+      if (!headOfHouseHold) {
+        const headOfHouseHold = await User.findOne({
+          where: {
+            headOfHouseHold: true,
+            familyId: familyId,
+          },
+        });
+        await newAccount.addAuthorizedUser(headOfHouseHold);
+      }
 
       // return the added account
       res.status = 201;
@@ -147,6 +158,45 @@ router.get(
     res.json({
       accounts: accounts,
     });
+  })
+);
+
+router.delete(
+  "/:accountId",
+  restoreUser,
+  asyncHandler(async (req, res, next) => {
+    // get user that needs to be deleted
+    const accountToBeDeleted = req.params.accountId;
+    // check if the user is head of household
+    const isHeadOfHouseHold = req.user.toJSON().headOfHouseHold;
+    // we can delete
+    if (isHeadOfHouseHold) {
+      try {
+        //delete the user
+        await Account.destroy({ where: { id: accountToBeDeleted } });
+        // return the deleted user status
+        res.json({
+          deleted: true,
+          userId: userToBeDeleted,
+        });
+      } catch (error) {
+        // return the error
+        next(error);
+      }
+    }
+    // the user can not delete because they are not head of household
+    else {
+      // return the error back to the client
+      const err = new Error(
+        "You are not the head of household and can not delete the user"
+      );
+      err.status = 401;
+      err.title = "Delete failed";
+      err.errors = [
+        "You are not the head of household and can not delete the user",
+      ];
+      return next(err);
+    }
   })
 );
 
