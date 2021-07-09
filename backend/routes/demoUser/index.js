@@ -3,7 +3,9 @@ const rn = require("random-number");
 console.log(random);
 
 function random() {
-  return rn({ min: 0, max: 1000000000, integer: true });
+  const random = rn({ min: 0, max: 1000000000, integer: true });
+  console.log(`here comes random`);
+  return random;
 }
 
 const family = {
