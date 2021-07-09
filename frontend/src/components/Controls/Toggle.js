@@ -8,6 +8,7 @@ function Toggle({ label, handleToggleChange, toggled }) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
+
   return (
     <div className="flex justify-between">
       <span className="flex-shrink-0">{label}</span>

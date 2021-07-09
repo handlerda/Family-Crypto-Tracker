@@ -10,6 +10,8 @@ import { getAccounts } from "./store/account";
 import Table from "./components/Table";
 import Header from "./components/Controls/Header";
 
+import BarChar from "./components/Charts/Bar";
+
 function App() {
   const dispatch = useDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
@@ -59,6 +61,7 @@ function App() {
                 <div className=" content-end">
                   <div className="mt-auto">
                     <Header title="Wallets"></Header>
+                    {accountsLoaded && <BarChar />}
                     {accountsLoaded && <Table />}
                   </div>
                 </div>

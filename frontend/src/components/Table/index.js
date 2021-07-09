@@ -9,7 +9,7 @@ const headers = [
 ];
 
 export default function Table() {
-  const accounts = useSelector((state) => state.account.accounts);
+  const accounts = useSelector((state) => state.account.all);
 
   if (accounts) {
     return (
@@ -35,8 +35,7 @@ export default function Table() {
                     </tr>
                   </thead>
                   <tbody className="bg-white divide-y divide-gray-200">
-                    {console.log(accounts)}
-                    {accounts.accounts.map((account) => {
+                    {Object.values(accounts).map((account) => {
                       return account.balances.map((balance) => {
                         return (
                           <tr>
