@@ -161,6 +161,13 @@ router.get(
         data.firstName = zaboAccount.User.firstName;
         data.accessibleUsers = users;
         data.crypfamId = account.id;
+        //remove the dummy balances
+
+        const newBalances = data.balances.filter((balance) => {
+          return balance.ticker !== "XYZ" && balance.ticker !== "RANDOMZABO";
+        });
+
+        data.balances = newBalances;
         return data;
       })
     );

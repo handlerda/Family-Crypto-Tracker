@@ -11,51 +11,7 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
-
-const data = [
-  {
-    name: "Page A",
-    uv: 4000,
-    pv: 2400,
-    amt: 2400,
-  },
-  {
-    name: "Page B",
-    uv: 3000,
-    pv: 1398,
-    amt: 2210,
-  },
-  {
-    name: "Page C",
-    uv: 2000,
-    pv: 9800,
-    amt: 2290,
-  },
-  {
-    name: "Page D",
-    uv: 2780,
-    pv: 3908,
-    amt: 2000,
-  },
-  {
-    name: "Page E",
-    uv: 1890,
-    pv: 4800,
-    amt: 2181,
-  },
-  {
-    name: "Page F",
-    uv: 2390,
-    pv: 3800,
-    amt: 2500,
-  },
-  {
-    name: "Page G",
-    uv: 3490,
-    pv: 4300,
-    amt: 2100,
-  },
-];
+import randomColor from "randomcolor";
 
 function BarChar() {
   const accounts = useSelector((state) => state.account.all);
@@ -91,11 +47,21 @@ function BarChar() {
       <YAxis />
       <Tooltip />
       <Legend />
-      {Object.values(releventData[0]).map((data) => {
+      {/* {Object.values(releventData[0]).map((data) => {
         return Object.keys(data).map((ticker) => {
           return ticker !== "name" && <Bar dataKey={ticker} fill="black" />;
         });
+      })} */}
+
+      {Object.keys(releventData[0]).map((value) => {
+        return (
+          value !== "name" &&
+          value !== "RANDOMZABO" &&
+          value !== "XYZ" && <Bar dataKey={value} fill={randomColor()} />
+        );
       })}
+      {/* <Bar dataKey="BTC" fill="RED" />;
+      <Bar dataKey="ETH" fill="BLACK" />; */}
     </BarChart>
     // </ResponsiveContainer>
   );
