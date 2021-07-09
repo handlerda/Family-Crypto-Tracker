@@ -4,7 +4,6 @@ module.exports = (sequelize, DataTypes) => {
     "Family",
     {
       name: DataTypes.STRING(50),
-      allowNull: false,
     },
     {}
   );

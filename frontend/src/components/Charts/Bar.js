@@ -15,7 +15,7 @@ import randomColor from "randomcolor";
 
 function BarChar() {
   const accounts = useSelector((state) => state.account.all);
-  const releventData = accounts.map((account) => {
+  const releventData = Object.values(accounts).map((account) => {
     //do work
     const obj = {};
     //get name

@@ -104,10 +104,11 @@ router.post(
       // return the added account
       res.status = 201;
       res.json({
-        status: "added",
-        zaboAccountId: zaboAccountObject.id,
-        accountId: newAccount.id,
-        userId: id,
+        // status: "added",
+        // zaboAccountId: zaboAccountObject.id,
+        // accountId: newAccount.id,
+        // userId: id,
+        ...zaboAccountObject,
       });
     } catch (error) {
       next(error);

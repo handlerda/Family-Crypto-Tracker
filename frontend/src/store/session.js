@@ -1,5 +1,6 @@
 import { csrfFetch } from "./csrf";
 // calls the household api (when new account)
+// CALL THE USER WHO IS LOGGED IN
 const SET_USER = "session/setUser";
 // calls the user api (adds a user associated with an account)
 const ADD_USER = "session/addUser";
@@ -127,6 +128,15 @@ export const getFamilyMembers = () => async (dispatch) => {
   const data = await response.json();
   dispatch(getUsers(data));
   console.log(`here comes data`, data);
+  return data;
+};
+
+export const signInDemoUser = () => async (dispatch) => {
+  const response = await csrfFetch("/api/households/demo");
+  const data = await response.json();
+  console.log(`what is data`, data);
+  console.log(`what is data.household`, data.headOfHouseHold);
+  dispatch(setUser(data.headOfHouseHold));
   return data;
 };
 

@@ -52,7 +52,8 @@ export const addAccount = (userId, zaboAccountObject) => async (dispatch) => {
     body: JSON.stringify({ zaboAccountObject, userId }),
   });
   const data = await response.json();
-  dispatch(thunk(ADD_ACCOUNT, data.wallet));
+  console.log(`here comes data`, data);
+  dispatch(thunk(ADD_ACCOUNT, data));
   return response;
 };
 
@@ -91,16 +92,15 @@ const accountReducer = (state = initialState, action) => {
       return newState;
     case GET_ACCOUNTS:
       newState = Object.assign({}, state);
-      console.log(action.payload);
-      // for (const account in action.payload) {
-      //   newState.all[action.payload[account].id] = action.payload[0]; // should be the same just a : wimilq4
-      // }
-      newState.all = action.payload;
+      //console.log(action.payload);
+      for (const account in action.payload) {
+        newState.all[action.payload[account].id] = action.payload[account]; // should be the same just a : wimilq4
+      }
       return newState;
     case ADD_ACCOUNT:
       newState = Object.assign({}, state);
-      newState.addedAccount = action.payload;
-      return newState;
+      newState.all[action.payload.id] = action.payload;
+      return { ...newState, all: { ...newState.all } };
     case REMOVE_ACCOUNT:
       delete state.all[action.payload];
       return {
@@ -110,6 +110,7 @@ const accountReducer = (state = initialState, action) => {
     case MODIFY_ACCOUNT:
       newState = Object.assign({}, state);
       newState.modifiedAccounts = action.payload;
+      return newState;
     default:
       return state;
   }

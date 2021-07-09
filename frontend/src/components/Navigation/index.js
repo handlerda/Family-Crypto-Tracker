@@ -46,6 +46,12 @@ function Navigation({ isLoaded }) {
   const logout = (e) => {
     e.preventDefault();
     dispatch(sessionActions.logout());
+    history.push("/");
+  };
+
+  const loginDemoUser = (e) => {
+    e.preventDefault();
+    dispatch(sessionActions.signInDemoUser());
   };
 
   const unauthenticatedNavigation = [
@@ -58,7 +64,7 @@ function Navigation({ isLoaded }) {
   const unauthenticatedButtons = [
     { name: "Login", href: "/login", current: false },
     { name: "Signup", href: "/sign-up", current: false },
-    { name: "Demo user", href: "/", current: false },
+    { name: "Demo user", href: "/demo-user", current: false },
   ];
 
   //nav links for a logged in user

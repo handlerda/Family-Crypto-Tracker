@@ -124,4 +124,41 @@ router.post(
   })
 );
 
+//handle demo user sign up
+router.get(
+  `/demo`,
+  asyncHandler(async (req, res, next) => {
+    const { family, users } = require("../demoUser");
+    //create new family
+    console.log(users);
+    try {
+      const newFamily = await Family.create({
+        name: `${family.name} household`,
+      });
+      const headOfHouseHold = await User.signup({
+        ...users[0],
+        familyId: newFamily.id,
+      });
+
+      await Promise.all(
+        users.map((user, index) => {
+          if (!user.headOfHouseHold) {
+            User.signup({
+              ...user,
+              familyId: newFamily.id,
+            });
+          }
+        })
+      );
+
+      await setTokenCookie(res, headOfHouseHold);
+      res.json({
+        headOfHouseHold,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  })
+);
+
 module.exports = router;

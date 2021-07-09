@@ -2,7 +2,7 @@ const express = require("express");
 const asyncHandler = require("express-async-handler");
 
 const { setTokenCookie, restoreUser } = require("../../utils/auth");
-const { User } = require("../../db/models");
+const { User, Account, Family } = require("../../db/models");
 const { check } = require("express-validator");
 const { handleValidationErrors } = require("../../utils/validation");
 
@@ -45,8 +45,83 @@ router.post(
   })
 );
 
+const isDemoUser = async (req, res, next) => {
+  const user = req.user;
+  const familyId = req.user.familyId;
+  console.log(user);
+  if (!user.demoUser) {
+    next();
+  } else {
+    try {
+      //get all family members
+      const familyMembers = await User.findAll({
+        where: {
+          familyId: user.familyId,
+        },
+      });
+      //remove associated accounts from all users
+
+      const accounts = await Promise.all(
+        familyMembers.map(async (member) => {
+          //remove all authorized accounts
+          const accounts = await member.getAuthorizedAccounts();
+          await member.removeAuthorizedAccounts(accounts);
+          return accounts;
+        })
+      );
+
+      // query all accounts associated with familyId
+      // const accounts = await Account.findAll({
+      //   include: [{ model: User, where: { familyId: user.familyId } }],
+      // });
+
+      // loop over the accounts and delete
+
+      // await Promise.all(
+      //   familyMembers.map(({ Account }) => {
+      //     return Account.destroy();
+      //   })
+      // );
+
+      //delete all accounts
+      await Promise.all(
+        accounts.map(async (account) => {
+          await Promise.all(
+            account.map((act) => {
+              return act.destroy();
+            })
+          );
+        })
+      );
+
+      // delete all users associated with family
+      await Promise.all(
+        familyMembers.map((member) => {
+          return member.destroy();
+        })
+      );
+
+      //query the family
+      const family = await Family.findByPk(familyId);
+
+      //delete the family
+      await family.destroy();
+      next();
+    } catch (error) {
+      console.log(error);
+      next(error);
+    }
+  }
+
+  //find accounts joins associated with user
+  //delete account joins associated with the user
+  //delete accounts with other associated users
+  //delete all users
+  //delete the family
+};
+
 //Log out
-router.delete("/", (_req, res) => {
+router.delete("/", restoreUser, isDemoUser, (_req, res) => {
   res.clearCookie("token");
   return res.json({ message: "success" });
 });

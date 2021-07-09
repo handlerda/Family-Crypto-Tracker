@@ -36,6 +36,10 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
         unique: true,
       },
+      demoUser: {
+        type: DataTypes.BOOLEAN,
+        allowNull: true,
+      },
       zaboId: {
         type: DataTypes.STRING,
         unique: true,
@@ -112,6 +116,7 @@ module.exports = (sequelize, DataTypes) => {
     phone,
     headOfHouseHold,
     familyId,
+    demoUser,
   }) {
     const hashedPassword = bcrypt.hashSync(password);
     const user = await User.create({
@@ -122,6 +127,7 @@ module.exports = (sequelize, DataTypes) => {
       phone,
       headOfHouseHold,
       familyId,
+      demoUser,
     });
     return await User.scope("currentUser").findByPk(user.id);
   };

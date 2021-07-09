@@ -42,6 +42,10 @@ module.exports = {
         type: Sequelize.INTEGER,
         references: { model: "Families" },
       },
+      demoUser: {
+        type: Sequelize.BOOLEAN,
+        allowNull: true,
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE,
