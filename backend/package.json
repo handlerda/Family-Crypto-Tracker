@@ -28,6 +28,7 @@
     "morgan": "^1.10.0",
     "per-env": "^1.0.2",
     "pg": "^8.6.0",
+    "random-number": "^0.0.9",
     "sequelize": "^5.22.4",
     "sequelize-cli": "^5.5.1",
     "twilio": "^3.65.0",

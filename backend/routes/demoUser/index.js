@@ -1,37 +1,44 @@
 //grab family id
+const rn = require("random-number");
+console.log(random);
+
+function random() {
+  return rn({ min: 0, max: 1000000000, integer: true });
+}
+
 const family = {
-  name: "demo-user",
+  name: `demo-family ${random()}`,
 };
 
 const users = [
   {
-    email: "demo-head-household@crypfam.com",
-    password: "password",
+    email: `demo-head-household-${random()}@crypfam.com`,
+    password: `${random()}`,
     firstName: "Family member 1 (head of household)",
     lastName: "demo user",
-    phone: "01234567891",
+    phone: `${random()}`,
     headOfHouseHold: true,
     demoUser: true,
 
     //add the family id
   },
   {
-    email: "demo1-user@crypfam.com",
-    password: "password",
+    email: `demo1-user-${random()}-@crypfam.com`,
+    password: `${random()}`,
     firstName: "Family member 2",
     lastName: "demo user",
-    phone: "123456781231",
+    phone: `${random()}`,
     headOfHouseHold: false,
     demoUser: true,
 
     //add the family id
   },
   {
-    email: "demo2-user@crypfam.com",
-    password: "password",
+    email: `demo2-user-${random()}@crypfam.com`,
+    password: `${random()}`,
     firstName: "Family member 3",
     lastName: "demo user",
-    phone: "12345678912",
+    phone: `${random()}`,
     headOfHouseHold: false,
     demoUser: true,
 

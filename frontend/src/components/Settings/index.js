@@ -71,7 +71,7 @@ export default function Settings() {
   }
 
   return (
-    <div>
+    <div className="bg-gray-100">
       <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-8">
         <div className="">
           <div className="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
@@ -84,7 +84,7 @@ export default function Settings() {
                     className={classNames(
                       item.current
                         ? "bg-teal-50 border-teal-500 text-teal-700 hover:bg-teal-50 hover:text-teal-700"
-                        : "border-transparent text-gray-900 hover:bg-gray-50 hover:text-gray-900",
+                        : "border-transparent text-gray-900  hover:text-gray-900",
                       "group border-l-4 px-3 py-2 flex items-center text-sm font-medium"
                     )}
                     aria-current={item.current ? "page" : undefined}
@@ -103,7 +103,7 @@ export default function Settings() {
                 ))}
               </nav>
             </aside>
-            <div className="divide-y divide-gray-200 lg:col-span-9 pl-5 pt-5">
+            <div className="divide-y divide-gray-200 lg:col-span-9 pl-5 pt-5 ">
               {console.log(`what is active`, accountActive)}
               {accountActive && <Account />}
               {familyActive && <Family />}

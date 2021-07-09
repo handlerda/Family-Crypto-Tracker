@@ -39,30 +39,30 @@ function App() {
 
   if (isLoaded) {
     return (
-      <>
-        {isLoaded && (
-          <>
-            <Navigation isLoaded={isLoaded} />
-            <Switch>
-              <Route path="/" exact>
+      isLoaded && (
+        <div>
+          <Navigation isLoaded={isLoaded} />
+          <Switch>
+            <Route path="/" exact>
+              <div>
                 <Dashboard />
-              </Route>
-              <Route path="/sign-up" exact>
-                <SignupFormPage />
-              </Route>
-              <Route path="/login" exact>
-                <LoginForm />
-              </Route>
-              <Route path="/settings" exact>
-                <Settings />
-              </Route>
-              <Route path="/demo-user">
-                <DemoUser />
-              </Route>
-            </Switch>
-          </>
-        )}
-      </>
+              </div>
+            </Route>
+            <Route path="/sign-up" exact>
+              <SignupFormPage />
+            </Route>
+            <Route path="/login" exact>
+              <LoginForm />
+            </Route>
+            <Route path="/settings" exact>
+              <Settings />
+            </Route>
+            <Route path="/demo-user">
+              <DemoUser />
+            </Route>
+          </Switch>
+        </div>
+      )
     );
   } else {
     return <h1>loading</h1>;
