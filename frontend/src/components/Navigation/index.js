@@ -68,12 +68,12 @@ function Navigation({ isLoaded }) {
   ];
 
   //nav links for a logged in user
-  const authenticatedNavigation = [
-    { name: "Family Dashboard", href: "/", current: false },
-    { name: "My Dashboard", href: "/", current: false },
-    { name: "Transactions", href: "", current: false },
-    { name: "Balances", href: "/", current: false },
-  ];
+  // const authenticatedNavigation = [
+  //   { name: "Family Dashboard", href: "/", current: false },
+  //   { name: "My Dashboard", href: "/", current: false },
+  //   { name: "Transactions", href: "", current: false },
+  //   { name: "Balances", href: "/", current: false },
+  // ];
   //user settings for a logged in user
   const userNavigation = [
     { name: "Settings", href: "settings" },
@@ -111,44 +111,15 @@ function Navigation({ isLoaded }) {
                   </div>
                   <div
                     className="flex-shrink-0 flex items-center"
-                    onClick={(e) => history.push("/")}
+                    onClick={() =>
+                      sessionUser
+                        ? history.push("/dashboard")
+                        : history.push("/")
+                    }
                   >
                     <span className="hidden font-bold text-pink-200 lg:block w-auto text-2xl">
                       Crypfam
                     </span>
-                  </div>
-                  <div className="hidden md:ml-6 md:flex md:items-center md:space-x-4">
-                    {sessionUser
-                      ? authenticatedNavigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-gray-900 text-white"
-                                : "text-white hover:bg-gray-700 hover:text-white",
-                              "px-3 py-2 rounded-md text-sm font-medium"
-                            )}
-                            aria-current={item.current ? "page" : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        ))
-                      : unauthenticatedNavigation.map((item) => (
-                          <a
-                            key={item.name}
-                            href={item.href}
-                            className={classNames(
-                              item.current
-                                ? "bg-gray-900 text-white"
-                                : "text-white hover:bg-gray-700 hover:text-white",
-                              "px-3 py-2 rounded-md text-sm font-medium"
-                            )}
-                            aria-current={item.current ? "page" : undefined}
-                          >
-                            {item.name}
-                          </a>
-                        ))}
                   </div>
                 </div>
                 <div className="flex items-center">
@@ -262,39 +233,6 @@ function Navigation({ isLoaded }) {
             </div>
             {/* {showZabo && } */}
             <Disclosure.Panel className="md:hidden">
-              <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
-                {sessionUser
-                  ? authenticatedNavigation.map((item) => (
-                      <Link
-                        key={item.name}
-                        to={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-white hover:bg-gray-700 hover:text-white",
-                          "block px-3 py-2 rounded-md text-base font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </Link>
-                    ))
-                  : unauthenticatedNavigation.map((item) => (
-                      <a
-                        key={item.name}
-                        href={item.href}
-                        className={classNames(
-                          item.current
-                            ? "bg-gray-900 text-white"
-                            : "text-white hover:bg-gray-700 hover:text-white",
-                          "block px-3 py-2 rounded-md text-base font-medium"
-                        )}
-                        aria-current={item.current ? "page" : undefined}
-                      >
-                        {item.name}
-                      </a>
-                    ))}
-              </div>
               {sessionUser && (
                 <div className="pt-4 pb-3 border-t border-gray-700">
                   <div className="flex items-center px-5 sm:px-6">

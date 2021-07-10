@@ -30,9 +30,9 @@ function Dashboard() {
     <div className="bg-gray-100 relative h-full">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 ">
         <Header title="Your accounts"></Header>
-        <div className="py-10  sm:px-0">
+        <div className="py-10  sm:px-0 px">
           {accounts.length > 0 && (
-            <div className="flex flex-row ">
+            <div className="flex flex-row justify-between">
               <div>
                 <h2 className="text-center mb-4">Crypto account value</h2>
                 <BarChar />
@@ -52,7 +52,7 @@ function Dashboard() {
             </div>
           )}
           {accounts.length === 0 && accountsLoaded && (
-            <div className="flex justify-center mt-48">
+            <div className="flex justify-center mt-32">
               <ActionPanel />
             </div>
           )}
