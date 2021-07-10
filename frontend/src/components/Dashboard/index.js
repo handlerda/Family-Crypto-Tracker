@@ -15,30 +15,19 @@ function Dashboard() {
   const [accountsLoaded, setAccountsLoaded] = useState(false);
   const [familyMembersLoaded, setFamilyMembersLoaded] = useState();
   const accounts = useSelector((state) => Object.keys(state.account.all));
+  const numAccounts = useSelector((state) => state.account.all);
   console.log(accounts);
   useEffect(() => {
-    dispatch(getAccounts()).then(() => setAccountsLoaded(true));
-  }, [dispatch]);
+    if (!accountsLoaded) {
+      dispatch(getAccounts()).then(() => setAccountsLoaded(true));
+    }
+  }, [dispatch, accounts, accountsLoaded]);
 
   useEffect(() => {
     dispatch(getFamilyMembers()).then(() => setFamilyMembersLoaded(true));
   }, [dispatch]);
   return (
-    // <div className="flex flex-col">
-    //   <div className="mx-8 mt-14">
-    //     <Header title="Wallets"></Header>
-    //     <div className="mt-">
-    //       {accounts.length > 0 && <BarChar />}
-    //       {accounts.length > 0 && <Table />}
-    //       {accounts.length === 0 && accountsLoaded && (
-    //         <div className="flex justify-center mt-48">
-    //           <ActionPanel />
-    //         </div>
-    //       )}
-    //     </div>
-    //   </div>
-    // </div>
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 relative h-full">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 ">
         <Header title="Your accounts"></Header>
         <div className="py-10  sm:px-0">

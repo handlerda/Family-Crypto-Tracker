@@ -12,6 +12,7 @@ import Header from "./components/Controls/Header";
 import BarChar from "./components/Charts/Bar";
 import DemoUser from "./components/DemoUser";
 import Dashboard from "./components/Dashboard";
+import Splash from "./components/Splash";
 
 function App() {
   const dispatch = useDispatch();
@@ -22,21 +23,6 @@ function App() {
     dispatch(sessionActions.restoreUser()).then(() => setIsLoaded(true));
   }, [dispatch]);
 
-  // async function handleClick(e) {
-  //   const data = await dispatch(getAccounts());
-  //   console.log(data);
-  // }
-
-  // \  //want to call if an add or subtract opp happens
-  // useEffect(() => {
-  //   if (!familyMembersLoaded) {
-  //     (async () => {
-  //       await dispatch(getFamilyMembers());
-  //       setFamilyMembersLoaded(true);
-  //     })();
-  //   }
-  // }, [dispatch, familyMembersLoaded]);
-
   if (isLoaded) {
     return (
       isLoaded && (
@@ -44,6 +30,9 @@ function App() {
           <Navigation isLoaded={isLoaded} />
           <Switch>
             <Route path="/" exact>
+              <Splash />
+            </Route>
+            <Route path="/dashboard" exact>
               <div>
                 <Dashboard />
               </div>

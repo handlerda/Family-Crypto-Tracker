@@ -3,7 +3,11 @@ const rn = require("random-number");
 console.log(random);
 
 function random() {
-  const random = rn({ min: 0, max: 1000000000, integer: true });
+  const random = rn({
+    min: -100000,
+    max: 10000000,
+    integer: true,
+  });
   console.log(`here comes random`);
   return random;
 }

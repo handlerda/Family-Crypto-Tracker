@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, NavLink, useHistory } from "react-router-dom";
+import { Link, NavLink, Redirect, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
 import ProfileButton from "./ProfileButton";
 import LoginFormModal from "../LoginFormModal";
@@ -17,7 +17,7 @@ import { addAccount } from "../../store/account";
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
-  const userId = useSelector((state) => state.session.user);
+  const sessionUser = useSelector((state) => state.session.user);
 
   const zaboLogin = async () => {
     const zabo = await Zabo.init({
@@ -34,7 +34,7 @@ function Navigation({ isLoaded }) {
       .onConnection((account) => {
         // handle successful connection
         console.log("account connected:", account);
-        const newWallet = dispatch(addAccount(userId.id, account));
+        const newWallet = dispatch(addAccount(sessionUser.id, account));
         console.log(newWallet);
       })
       .onError((error) => {
@@ -49,9 +49,10 @@ function Navigation({ isLoaded }) {
     history.push("/");
   };
 
-  const loginDemoUser = (e) => {
+  const loginDemoUser = async (e) => {
     e.preventDefault();
     dispatch(sessionActions.signInDemoUser());
+    history.push("/dashboard");
   };
 
   const unauthenticatedNavigation = [
@@ -64,7 +65,6 @@ function Navigation({ isLoaded }) {
   const unauthenticatedButtons = [
     { name: "Login", href: "/login", current: false },
     { name: "Signup", href: "/sign-up", current: false },
-    { name: "Demo user", href: "/demo-user", current: false },
   ];
 
   //nav links for a logged in user
@@ -85,7 +85,7 @@ function Navigation({ isLoaded }) {
   }
 
   // sessionUser
-  const sessionUser = useSelector((state) => state.session.user);
+  console.log(`where is my navbar`);
 
   return (
     isLoaded && (
@@ -109,7 +109,10 @@ function Navigation({ isLoaded }) {
                       )}
                     </Disclosure.Button>
                   </div>
-                  <div className="flex-shrink-0 flex items-center">
+                  <div
+                    className="flex-shrink-0 flex items-center"
+                    onClick={(e) => history.push("/")}
+                  >
                     <span className="hidden font-bold text-pink-200 lg:block w-auto text-2xl">
                       Crypfam
                     </span>
@@ -175,6 +178,15 @@ function Navigation({ isLoaded }) {
                         );
                       })
                     )}
+                    {!sessionUser && (
+                      <button
+                        type="button"
+                        className="relative inline-flex items-center mx-4 px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-pink-500 hover:bg-pink-600 focus:outline-none focus:ring-2 focus:ring-offset-2"
+                        onClick={(e) => loginDemoUser(e)}
+                      >
+                        <span>Demo User</span>
+                      </button>
+                    )}
                   </div>
 
                   {sessionUser && (
@@ -201,7 +213,7 @@ function Navigation({ isLoaded }) {
                             >
                               <Menu.Items
                                 static
-                                className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                                className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg py-1 bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-50"
                               >
                                 {userNavigation.map((item) => {
                                   if (item.name === "Sign out") {
