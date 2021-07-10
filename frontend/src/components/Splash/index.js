@@ -1,6 +1,6 @@
 import React from "react";
 import {
-  AnnotationIcon,
+  ShieldCheckIcon,
   GlobeAltIcon,
   LightningBoltIcon,
   MailIcon,
@@ -14,7 +14,7 @@ function Splash() {
       name: "Manage family accounts under one roof:",
       description:
         "No more sending a family member 2 factor auth code to login to an exchange. Now you can access your family's crypto  in a secure centralized portal.",
-      icon: GlobeAltIcon,
+      icon: ShieldCheckIcon,
     },
     {
       id: 2,
@@ -27,24 +27,8 @@ function Splash() {
       id: 3,
       name: "Conditional account access",
       description:
-        "Each family member has a head of household. The head of household or the specific account owner can decide who has access to each account",
+        "Each family member has a head of household. The head of household or the specific account owner can decide which family members can access the respective account.",
       icon: LightningBoltIcon,
-    },
-  ];
-  const communicationFeatures = [
-    {
-      id: 1,
-      name: "Mobile notifications",
-      description:
-        "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
-      icon: AnnotationIcon,
-    },
-    {
-      id: 2,
-      name: "Reminder emails",
-      description:
-        "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Maiores impedit perferendis suscipit eaque, iste dolor cupiditate blanditiis ratione.",
-      icon: MailIcon,
     },
   ];
 
@@ -103,14 +87,15 @@ function Splash() {
             <p className="mt-3 text-lg text-gray-500">
               You can connect to the most popular exchanges including Coinbase,
               Gemini and Binance. If you manage your own keys you can connect
-              via a secure Trezor or Ledger integration.
+              via a secure Trezor or Ledger integration or just enter your
+              public wallet address.
             </p>
 
             <dl className="mt-10 space-y-10">
               {transferFeatures.map((item) => (
                 <div key={item.id} className="relative">
                   <dt>
-                    <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-indigo-500 text-white">
+                    <div className="absolute flex items-center justify-center h-12 w-12 rounded-md bg-pink-500 text-white">
                       <item.icon className="h-6 w-6" aria-hidden="true" />
                     </div>
                     <p className="ml-16 text-lg leading-6 font-medium text-gray-900">
@@ -158,10 +143,10 @@ function Splash() {
                 fill="url(#ca9667ae-9f92-4be7-abcb-9e3d727f2941)"
               />
             </svg>
+
             <img
               className="relative mx-auto"
-              width={490}
-              src="https://tailwindui.com/img/features/feature-example-1.png"
+              src="https://www.decolore.net/wp-content/uploads/2018/08/Crypto-icons-free-sketch.png"
               alt=""
             />
           </div>

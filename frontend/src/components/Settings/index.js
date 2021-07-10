@@ -71,7 +71,7 @@ export default function Settings() {
   }
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-white-100">
       <div className="max-w-screen-xl mx-auto pb-6 px-4 sm:px-6 lg:pb-16 lg:px-8">
         <div className="">
           <div className="divide-y divide-gray-200 lg:grid lg:grid-cols-12 lg:divide-y-0 lg:divide-x">
@@ -103,7 +103,7 @@ export default function Settings() {
                 ))}
               </nav>
             </aside>
-            <div className="divide-y divide-gray-200 lg:col-span-9 pl-5 pt-5 ">
+            <div className="divide-y divide-gray-200 bg-white h-full lg:col-span-9 pl-5 pt-5 ">
               {console.log(`what is active`, accountActive)}
               {accountActive && <Account />}
               {familyActive && <Family />}
