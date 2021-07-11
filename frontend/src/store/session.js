@@ -135,9 +135,12 @@ export const getFamilyMembers = () => async (dispatch) => {
 export const signInDemoUser = () => async (dispatch) => {
   const response = await csrfFetch("/api/households/demo");
   const data = await response.json();
-  console.log(`what is data`, data);
-  console.log(`what is data.household`, data.headOfHouseHold);
+  // console.log(`what is data`, data);
+  // console.log(`what is data.household`, data.headOfHouseHold);
+  const users = data.familyMembers;
+  console.log(users);
   dispatch(setUser(data.headOfHouseHold));
+  dispatch(getUsers({ users }));
   return data;
 };
 

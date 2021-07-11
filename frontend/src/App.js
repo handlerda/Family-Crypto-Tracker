@@ -47,9 +47,6 @@ function App() {
             <Route path="/settings" exact>
               <Settings />
             </Route>
-            <Route path="/demo-user">
-              <DemoUser />
-            </Route>
           </Switch>
         </div>
       )

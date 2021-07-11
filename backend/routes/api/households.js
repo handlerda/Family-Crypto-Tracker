@@ -139,10 +139,11 @@ router.get(
         familyId: newFamily.id,
       });
 
+      // add family members to the database
       await Promise.all(
-        users.map((user, index) => {
+        users.map(async (user, index) => {
           if (!user.headOfHouseHold) {
-            User.signup({
+            await User.signup({
               ...user,
               familyId: newFamily.id,
             });
@@ -150,9 +151,23 @@ router.get(
         })
       );
 
+      // parse the family members to json
+      const familyMemberQuery = await User.findAll({
+        where: {
+          familyId: newFamily.id,
+          headOfHouseHold: false,
+        },
+      });
+      // loop over family members
+      const familyMembers = await familyMemberQuery.map((member) => {
+        return member.toJSON();
+      });
+      console.log(familyMembers, `here are family members`);
+
       await setTokenCookie(res, headOfHouseHold);
       res.json({
         headOfHouseHold,
+        familyMembers,
       });
     } catch (error) {
       console.log(error);

@@ -27,7 +27,9 @@ router.post(
     const { credential, password } = req.body;
     console.log(credential, password);
 
+    //get users
     const user = await User.login({ credential, password });
+    //get familyMembers
 
     if (!user) {
       const err = new Error("Login failed");
@@ -69,19 +71,6 @@ const isDemoUser = async (req, res, next) => {
           return accounts;
         })
       );
-
-      // query all accounts associated with familyId
-      // const accounts = await Account.findAll({
-      //   include: [{ model: User, where: { familyId: user.familyId } }],
-      // });
-
-      // loop over the accounts and delete
-
-      // await Promise.all(
-      //   familyMembers.map(({ Account }) => {
-      //     return Account.destroy();
-      //   })
-      // );
 
       //delete all accounts
       await Promise.all(
