@@ -70,7 +70,6 @@ const addFamilyHeadHouseHold = asyncHandler(async (req, res, next) => {
       headOfHouseHold: true,
       familyId: newFamily.id,
     });
-    //console.log(headOfHouseHold);
     // pass to next function
     res.locals.family = newFamily;
     res.locals.headHouseHold = headOfHouseHold;

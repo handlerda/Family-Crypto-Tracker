@@ -2,25 +2,34 @@ const express = require("express");
 const asyncHandler = require("express-async-handler");
 const { requireAuth, restoreUser } = require("../../../utils/auth");
 const { User, Account, AuthorizedAccountUser } = require("../../../db/models");
-//const zabo = require("../../zabo");
 const Zabo = require("zabo-sdk-js");
-//console.log(zabo.toString());
 const router = express.Router();
 
-// wallet routes
-// add a new wallet
+//standardize the account return payload
+function filterBalance(zaboAccountObj) {
+  return zaboAccountObj.balances.filter((balance) => {
+    return balance.ticker !== "XYZ" && balance.ticker !== "RANDOMZABO";
+  });
+}
+function returnedAccounts(
+  zaboAccountObj,
+  userId,
+  firstName,
+  users = null,
+  crypfamId,
+  balances
+) {
+  zaboAccountObj.userId = userId;
+  zaboAccountObj.firstName = firstName;
+  zaboAccountObj.accessibleUsers = users;
+  zaboAccountObj.crypfamId = crypfamId;
+  zaboAccountObj.balances = balances;
+
+  return zaboAccountObj;
+}
 
 // middleware
-// check if demo account
-const isDemoUser = async (req, res, next) => {
-  console.log(req.user);
-  //const { id } = req.user;
-  next();
-};
-
-//handle zabo user info
-// if crypfam userId !== zabo account create user
-// else add account to current zabo account
+// check if the user is in zabo
 const isZaboUser = async (req, res, next) => {
   const { zaboAccountObject } = req.body;
   //get user info
@@ -76,7 +85,7 @@ router.post(
     console.log(req);
     try {
       const { zaboAccountObject } = req.body;
-      const { id, familyId, headOfHouseHold } = req.user.dataValues;
+      const { id, familyId, headOfHouseHold, firstName } = req.user.dataValues;
       // initialize zabo object
 
       //create new account
@@ -100,15 +109,20 @@ router.post(
         });
         await newAccount.addAuthorizedUser(headOfHouseHold);
       }
+      //allow current user to be an active user
+      const users = [{ id }];
+      const accounts = returnedAccounts(
+        zaboAccountObject,
+        id,
+        firstName,
+        users,
+        newAccount.id,
+        filterBalance(zaboAccountObject)
+      );
 
-      // return the added account
       res.status = 201;
       res.json({
-        // status: "added",
-        // zaboAccountId: zaboAccountObject.id,
-        // accountId: newAccount.id,
-        // userId: id,
-        ...zaboAccountObject,
+        ...accounts,
       });
     } catch (error) {
       next(error);
@@ -158,18 +172,18 @@ router.get(
           };
         });
 
-        data.userId = zaboAccount.User.id;
-        data.firstName = zaboAccount.User.firstName;
-        data.accessibleUsers = users;
-        data.crypfamId = account.id;
-        //remove the dummy balances
-
-        const newBalances = data.balances.filter((balance) => {
-          return balance.ticker !== "XYZ" && balance.ticker !== "RANDOMZABO";
-        });
-
-        data.balances = newBalances;
-        return data;
+        //structure object for json payload
+        const userId = zaboAccount.User.id;
+        const firstName = zaboAccount.User.firstName;
+        const accountPayload = returnedAccounts(
+          data,
+          userId,
+          firstName,
+          users,
+          account.id,
+          filterBalance(data)
+        );
+        return accountPayload;
       })
     );
 
@@ -289,6 +303,3 @@ router.patch(
 );
 
 module.exports = router;
-
-// add authorizedAccount model
-//npx sequelize model:generate --name AuthorizedAccountUser --attributes userId:integer,accountId:integer;
