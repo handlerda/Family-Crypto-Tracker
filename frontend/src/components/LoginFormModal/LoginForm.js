@@ -20,7 +20,7 @@ function LoginForm() {
     );
   };
 
-  if (sessionUser) return <Redirect to="/" />;
+  if (sessionUser) return <Redirect to="/dashboard" />;
 
   return (
     <div className="min-h-screen bg-pink-500 flex flex-col justify-center py-12 sm:px-6 lg:px-8">

@@ -132,7 +132,7 @@ function SignupFormPage() {
     });
   }
 
-  if (sessionUser) return <Redirect to="/" />;
+  if (sessionUser) return <Redirect to="/dashboard" />;
   // handle submit
   const handleSubmit = (e) => {
     e.preventDefault();

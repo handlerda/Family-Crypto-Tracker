@@ -110,6 +110,7 @@ export const deleteFamilyMember = (memberId) => async (dispatch) => {
     method: "DELETE",
   });
   const data = await response.json();
+  console.log(data, `here comes data on delete`);
   dispatch(deleteUser(data));
   return data;
 };
@@ -155,16 +156,25 @@ const sessionReducer = (state = initialState, action) => {
       return newState;
     case ADD_USER:
       newState = Object.assign({}, state);
-      newState.newFamilyMember = action.payload;
-      return newState;
+      newState.familyMembers.users.push(action.payload.added);
+      return {
+        ...newState,
+        familyMembers: { ...newState.familyMembers },
+      };
     case GET_USERS:
       newState = Object.assign({}, state);
       newState.familyMembers = action.payload;
       return newState;
     case DELETE_USER:
       newState = Object.assign({}, state);
-      newState.deletedFamilyMember = action.payload;
-      return newState;
+      const deletedUser = +action.payload.userId;
+      newState.familyMembers.users = newState.familyMembers.users.filter(
+        (user) => user.id !== deletedUser
+      );
+
+      return {
+        ...newState,
+      };
     default:
       return state;
   }

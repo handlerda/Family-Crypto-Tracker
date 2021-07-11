@@ -37,8 +37,8 @@ function Dashboard() {
                 <h2 className="text-center mb-4">Crypto account value</h2>
                 <BarChar />
               </div>
-              <div>
-                <h2 className="text-center mb-4">Account value USD</h2>
+              <div className="flex flex-col">
+                <h2 className=" text-right mr-44 mb-4">Account value USD</h2>
                 <AccountsGrid />
               </div>
             </div>

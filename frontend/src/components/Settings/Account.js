@@ -170,10 +170,10 @@ function Account() {
                       </button>
                       <p className="ml-8">
                         Deleting an account removes the UUID that points to your
-                        external wallet. Crypfam does not keep any of your
-                        private keys in our encrypted database. Deleting your
-                        account removes the link from Crypfam to your wallet(s).
-                        This action will not effect your crypto.
+                        external wallet. Crypfam does not keep any of your keys
+                        in our encrypted database. Deleting your account removes
+                        the link from Crypfam to your wallet(s). This action
+                        will not effect your crypto.
                       </p>
                     </div>
                   </div>
