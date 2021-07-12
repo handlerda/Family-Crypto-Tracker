@@ -156,7 +156,7 @@ router.get(
           include: User,
         });
 
-        const data = await zabo.users.getAccount({
+        const zaboAccountPayload = await zabo.users.getAccount({
           userId: zaboAccount.User.zaboId,
           accountId: zaboAccount.zaboId,
         });
@@ -176,12 +176,12 @@ router.get(
         const userId = zaboAccount.User.id;
         const firstName = zaboAccount.User.firstName;
         const accountPayload = returnedAccounts(
-          data,
+          zaboAccountPayload,
           userId,
           firstName,
           users,
           account.id,
-          filterBalance(data)
+          filterBalance(zaboAccountPayload)
         );
         return accountPayload;
       })
