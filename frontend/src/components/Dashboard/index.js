@@ -7,7 +7,6 @@ import BarChar from "../Charts/Bar";
 import AccountsGrid from "../Controls/AccountsGrid";
 import ActionPanel from "../Controls/ActionPanel";
 import Header from "../Controls/Header";
-import Warning from "../Controls/Warning";
 import Table from "../Table";
 
 function Dashboard() {
