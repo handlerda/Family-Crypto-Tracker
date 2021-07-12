@@ -40,6 +40,7 @@ export const getAccounts = () => async (dispatch) => {
   const data = await response.json();
   const { accounts } = data;
   dispatch(thunk(GET_ACCOUNTS, accounts));
+  return accounts;
 };
 
 // take in array of accountIds

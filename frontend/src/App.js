@@ -6,11 +6,6 @@ import * as sessionActions from "./store/session";
 import Navigation from "./components/Navigation";
 import LoginForm from "./components/LoginFormModal/LoginForm";
 import Settings from "./components/Settings";
-import { getAccounts } from "./store/account";
-import Table from "./components/Table";
-import Header from "./components/Controls/Header";
-import BarChar from "./components/Charts/Bar";
-import DemoUser from "./components/DemoUser";
 import Dashboard from "./components/Dashboard";
 import Splash from "./components/Splash";
 

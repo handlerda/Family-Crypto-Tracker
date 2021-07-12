@@ -259,8 +259,8 @@ function SignupFormPage() {
 
                                 member.email && (
                                   <Input
-                                    label="Last Name"
-                                    type="string"
+                                    label="Email"
+                                    type="email"
                                     value={member.email}
                                     handleChange={(e) =>
                                       setAdditionalFamilyMember({

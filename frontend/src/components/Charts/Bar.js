@@ -15,6 +15,7 @@ import randomColor from "randomcolor";
 
 function BarChar() {
   const accounts = useSelector((state) => state.account.all);
+  const colors = ["purple", "black"];
   const releventData = Object.values(accounts).map((account) => {
     //do work
     const obj = {};
@@ -53,11 +54,13 @@ function BarChar() {
         });
       })} */}
 
-      {Object.keys(releventData[0]).map((value) => {
+      {Object.keys(releventData[0]).map((value, index) => {
         return (
           value !== "name" &&
           value !== "RANDOMZABO" &&
-          value !== "XYZ" && <Bar dataKey={value} fill={randomColor()} />
+          value !== "XYZ" && (
+            <Bar dataKey={value} fill={colors[Math.floor(Math.random() * 2)]} />
+          )
         );
       })}
       {/* <Bar dataKey="BTC" fill="RED" />;

@@ -15,16 +15,25 @@ function Dashboard() {
   const [familyMembersLoaded, setFamilyMembersLoaded] = useState();
   const accounts = useSelector((state) => Object.keys(state.account.all));
   const numAccounts = useSelector((state) => state.account.all);
-  console.log(accounts);
   useEffect(() => {
     if (!accountsLoaded) {
-      dispatch(getAccounts()).then(() => setAccountsLoaded(true));
+      (async () => {
+        await dispatch(getAccounts()).then(() => setAccountsLoaded(true));
+        setAccountsLoaded(true);
+      })();
     }
-  }, [dispatch, accounts, accountsLoaded]);
+  }, [dispatch, accounts, accountsLoaded, numAccounts, familyMembersLoaded]);
 
   useEffect(() => {
-    dispatch(getFamilyMembers()).then(() => setFamilyMembersLoaded(true));
-  }, [dispatch]);
+    if (familyMembersLoaded) {
+      (async () => {
+        await dispatch(getFamilyMembers()).then(() =>
+          setFamilyMembersLoaded(true)
+        );
+      })();
+    }
+  }, [dispatch, familyMembersLoaded, accountsLoaded]);
+
   return (
     <div className="bg-gray-100 relative h-full">
       <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 ">
@@ -42,7 +51,7 @@ function Dashboard() {
               </div>
             </div>
           )}
-          {accounts.length > 0 && (
+          {accounts.length > 0 && accountsLoaded && (
             <div className="mt-12">
               <h2>Account Summary</h2>
               <div className="mt-10">
@@ -50,7 +59,10 @@ function Dashboard() {
               </div>
             </div>
           )}
-          {accounts.length === 0 && accountsLoaded && (
+          {console.log(`here come accounts`, accounts.length)}
+          {console.log(`here come numAccounts`, numAccounts)}
+          {console.log(`here come accountsLoaded`, accountsLoaded)}
+          {accountsLoaded && accounts.length === 0 && (
             <div className="flex justify-center mt-32">
               <ActionPanel />
             </div>
