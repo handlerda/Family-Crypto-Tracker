@@ -62,6 +62,9 @@ function Account() {
           </h2>
         </div>
       </div>
+      {!Object.keys(accounts).length && (
+        <h1>You have no accounts! Click the connect button to get started!</h1>
+      )}
       <ul className="divide-y divide-gray-200">
         {Object.values(accounts).map((account) => (
           <li key={account.id} className="py-8 flex">

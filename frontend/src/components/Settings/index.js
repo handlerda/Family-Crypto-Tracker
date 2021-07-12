@@ -108,6 +108,14 @@ export default function Settings() {
               {accountActive && <Account />}
               {familyActive && <Family />}
               {passwordActive && <Password />}
+              {billingActive && (
+                <div className="flex-1 min-w-0">
+                  <h2 className="text-2xl font-bold leading-7 text-gray-900 sm:text-3xl sm:truncate">
+                    Account Details
+                  </h2>
+                  <h1>This is being worked on in V2</h1>
+                </div>
+              )}
               {/* <Account />
               <Family /> */}
             </div>
