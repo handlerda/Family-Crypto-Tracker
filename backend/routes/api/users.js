@@ -38,11 +38,17 @@ router.post(
     try {
       const familyId = req.user.toJSON().familyId;
       const newUser = req.body;
+      console.log(newUser);
       const user = await User.signup({
         ...newUser,
         familyId: familyId,
         headOfHouseHold: false,
       });
+      // send txt msg
+      await sendTxtMsg(
+        `You have been added to crypfam! Your password is ${newUser.password}`,
+        newUser.phone
+      );
       res.status(201);
       res.json({ added: user.toJSON() });
     } catch (error) {
