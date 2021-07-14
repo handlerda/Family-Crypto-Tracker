@@ -1,10 +1,7 @@
 import { Switch } from "@headlessui/react";
-import { CheckIcon } from "@heroicons/react/solid";
 import React from "react";
-//import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
 
 function Toggle({ label, handleToggleChange, toggled }) {
-  // const { addFamilyMembers, setAddFamilyMembers } = useAddFamilyMemberSignUp();
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
