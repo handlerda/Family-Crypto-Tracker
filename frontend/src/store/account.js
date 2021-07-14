@@ -8,8 +8,8 @@ const GET_ACCOUNT = "wallet/getAccount";
 const GET_ACCOUNTS = "wallet/getAccounts";
 const ADD_ACCOUNT = "wallet/addAccount";
 const MODIFY_ACCOUNT = "wallet/modifyAccounts";
-const REMOVE_ACCOUNT = "session/removeAccount";
-
+const REMOVE_ACCOUNT = "wallet/removeAccount";
+const CLEAR_ACCOUNT_STORE = "wallet/clearAccounts";
 const thunk = (type, payload) => {
   return {
     type,
@@ -81,6 +81,12 @@ export const deleteAccount = (accountId) => async (dispatch) => {
   return response;
 };
 
+export const clearAccountStore = () => async (dispatch) => {
+  //clear the account
+  dispatch(thunk(CLEAR_ACCOUNT_STORE, null));
+  return null;
+};
+
 const initialState = { wallet: null, all: {} };
 
 const accountReducer = (state = initialState, action) => {
@@ -110,6 +116,10 @@ const accountReducer = (state = initialState, action) => {
     case MODIFY_ACCOUNT:
       newState = Object.assign({}, state);
       newState.modifiedAccounts = action.payload;
+      return newState;
+    case CLEAR_ACCOUNT_STORE:
+      newState = Object.assign({}, state);
+      newState = initialState;
       return newState;
     default:
       return state;

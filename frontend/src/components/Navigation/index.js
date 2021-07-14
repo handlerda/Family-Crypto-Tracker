@@ -10,10 +10,10 @@ import { PlusIcon } from "@heroicons/react/solid";
 import { CogIcon } from "@heroicons/react/solid";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
+import { addAccount, clearAccountStore } from "../../store/account";
 
 //import Zabo from "zabo"
 import Zabo from "zabo-sdk-js";
-import { addAccount } from "../../store/account";
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
@@ -43,10 +43,13 @@ function Navigation({ isLoaded }) {
       });
   };
 
-  const logout = (e) => {
+  const logout = async (e) => {
     e.preventDefault();
-    dispatch(sessionActions.logout());
+    await dispatch(sessionActions.logout());
+    await dispatch(clearAccountStore());
     history.push("/");
+    // .then(() => history.push("/"))
+    // .then(() => clearAccountStore());
   };
 
   const loginDemoUser = async (e) => {

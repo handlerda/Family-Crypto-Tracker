@@ -28,43 +28,44 @@ function BarChar() {
     return obj;
   });
 
-  console.log(releventData);
-  return (
-    // <ResponsiveContainer width="100%" height="100%">
-    <BarChart
-      width={500}
-      height={300}
-      data={releventData}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      {/* {Object.values(releventData[0]).map((data) => {
+  if (Object.keys(accounts).length) {
+    return (
+      // <ResponsiveContainer width="100%" height="100%">
+      <BarChart
+        width={500}
+        height={300}
+        data={releventData}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
+        {/* {Object.values(releventData[0]).map((data) => {
         return Object.keys(data).map((ticker) => {
           return ticker !== "name" && <Bar dataKey={ticker} fill="black" />;
         });
       })} */}
 
-      {Object.keys(releventData[0]).map((value) => {
-        return (
-          value !== "name" &&
-          value !== "RANDOMZABO" &&
-          value !== "XYZ" && <Bar dataKey={value} fill={randomColor()} />
-        );
-      })}
-      {/* <Bar dataKey="BTC" fill="RED" />;
+        {Object.keys(releventData[0]).map((value) => {
+          return (
+            value !== "name" &&
+            value !== "RANDOMZABO" &&
+            value !== "XYZ" && <Bar dataKey={value} fill={randomColor()} />
+          );
+        })}
+        {/* <Bar dataKey="BTC" fill="RED" />;
       <Bar dataKey="ETH" fill="BLACK" />; */}
-    </BarChart>
-    // </ResponsiveContainer>
-  );
+      </BarChart>
+      // </ResponsiveContainer>
+    );
+  }
 }
 
 export default BarChar;

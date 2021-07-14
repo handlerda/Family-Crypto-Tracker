@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 
 function ActionPanel() {
   const user = useSelector((state) => state.session.user);
-  console.log(user);
+
   return (
     <div className="bg-purple-400 shadow sm:rounded-lg">
       <div className="px-4 py-3 sm:p-6 mb-6">
@@ -21,12 +21,17 @@ function ActionPanel() {
             <p className="leading-6 text-center font-medium text-white">
               API keys have been pre-populated!
             </p>
+            <p className="leading-6 text-center font-medium text-white">
+              No need to submit personal info! Click an exchange like Binance!
+            </p>
+            <p className="leading-6 text-center font-medium text-white">
+              A dummy account will be loaded into your account
+            </p>
             <p className="leading-6 text-center font-medium text-white pt-11">
               To get out of demo mode click the setting gear and sign out.
             </p>
             <p className="leading-6 text-center font-medium text-white pt-6">
-              I want to get your feedback! Sending me a note
-              davis@dlh-ventures.com
+              I want to get your feedback! Send me a note davis@dlh-ventures.com
             </p>
           </div>
         )}

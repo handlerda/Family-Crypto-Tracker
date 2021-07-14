@@ -11,53 +11,59 @@ import Table from "../Table";
 
 function Dashboard() {
   const dispatch = useDispatch();
-  const [accountsLoaded, setAccountsLoaded] = useState(false);
-  const [familyMembersLoaded, setFamilyMembersLoaded] = useState();
-  const accounts = useSelector((state) => Object.keys(state.account.all));
-  const numAccounts = useSelector((state) => state.account.all);
-  console.log(accounts);
+  const user = useSelector((state) => state.session.user);
+  const accounts = useSelector((state) => state.account.all);
+  const [loadDashboard, setLoadDashboard] = useState(false);
+  const [accountsPresent, setAccountsPresent] = useState(null);
   useEffect(() => {
-    if (!accountsLoaded) {
-      dispatch(getAccounts()).then(() => setAccountsLoaded(true));
+    if (user && accounts) {
+      // should we render accounts or dummy text
+      Object.keys(accounts).length > 0
+        ? setAccountsPresent(true)
+        : setAccountsPresent(false);
+      //load the dashboard
+      setLoadDashboard(true);
     }
-  }, [dispatch, accounts, accountsLoaded]);
+  }, [user, accounts, accountsPresent]);
 
   useEffect(() => {
-    dispatch(getFamilyMembers()).then(() => setFamilyMembersLoaded(true));
+    dispatch(getFamilyMembers());
   }, [dispatch]);
   return (
-    <div className="bg-gray-100 relative h-full">
-      <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 ">
-        <Header title="Your accounts"></Header>
-        <div className="py-10  sm:px-0 px">
-          {accounts.length > 0 && (
-            <div className="flex flex-row justify-between">
-              <div>
-                <h2 className="text-center mb-4">Crypto account value</h2>
-                <BarChar />
+    loadDashboard && (
+      <div className="bg-gray-100 relative h-full">
+        <div className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8 ">
+          <Header title="Your accounts"></Header>
+          <div className="py-10  sm:px-0 px">
+            {accountsPresent && (
+              <div className="flex flex-row justify-between">
+                <div>
+                  <h2 className="text-center mb-4">Crypto account value</h2>
+                  <BarChar />
+                </div>
+                <div className="flex flex-col">
+                  <h2 className=" text-right mr-44 mb-4">Account value USD</h2>
+                  <AccountsGrid />
+                </div>
               </div>
-              <div className="flex flex-col">
-                <h2 className=" text-right mr-44 mb-4">Account value USD</h2>
-                <AccountsGrid />
+            )}
+            {accountsPresent && (
+              <div className="mt-12">
+                <h2>Account Summary</h2>
+                <div className="mt-10">
+                  <Table />
+                </div>
               </div>
-            </div>
-          )}
-          {accounts.length > 0 && (
-            <div className="mt-12">
-              <h2>Account Summary</h2>
-              <div className="mt-10">
-                <Table />
+            )}
+            {!accountsPresent && (
+              <div className="flex justify-center mt-32">
+                <ActionPanel />
               </div>
-            </div>
-          )}
-          {accounts.length === 0 && accountsLoaded && (
-            <div className="flex justify-center mt-32">
-              <ActionPanel />
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </div>
-    </div>
+    )
   );
 }
 
