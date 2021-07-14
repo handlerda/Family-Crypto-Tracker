@@ -8,6 +8,7 @@ import AccountsGrid from "../Controls/AccountsGrid";
 import ActionPanel from "../Controls/ActionPanel";
 import Header from "../Controls/Header";
 import Table from "../Table";
+import NoAccounts from "./NoAccounts";
 
 function Dashboard() {
   const dispatch = useDispatch();
@@ -55,11 +56,7 @@ function Dashboard() {
                 </div>
               </div>
             )}
-            {!accountsPresent && (
-              <div className="flex justify-center mt-32">
-                <ActionPanel />
-              </div>
-            )}
+            {!accountsPresent && <NoAccounts />}
           </div>
         </div>
       </div>

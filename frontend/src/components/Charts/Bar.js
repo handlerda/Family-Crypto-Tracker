@@ -1,22 +1,22 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import {
-  BarChart,
-  Bar,
-  Cell,
+  BarChart as rechartBarChart,
+  Bar as rechartBar,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from "recharts";
 import randomColor from "randomcolor";
 
 function BarChar() {
+  // load accounts
   const accounts = useSelector((state) => state.account.all);
-  const releventData = Object.values(accounts).map((account) => {
-    //do work
+  // this should move to a custom hook
+  const accountData = Object.values(accounts).map((account) => {
+    // loop through each account boject
     const obj = {};
     //get name
     obj.name = account.provider.display_name;
@@ -24,17 +24,17 @@ function BarChar() {
     account.balances.forEach((balance) => {
       obj[balance.ticker] = balance.amount;
     });
-    // console.log(obj);
     return obj;
   });
 
+  // if there are accounts render
   if (Object.keys(accounts).length) {
+    // render the chart
     return (
-      // <ResponsiveContainer width="100%" height="100%">
-      <BarChart
+      <rechartBarChart
         width={500}
         height={300}
-        data={releventData}
+        data={accountData}
         margin={{
           top: 5,
           right: 30,
@@ -47,23 +47,18 @@ function BarChar() {
         <YAxis />
         <Tooltip />
         <Legend />
-        {/* {Object.values(releventData[0]).map((data) => {
-        return Object.keys(data).map((ticker) => {
-          return ticker !== "name" && <Bar dataKey={ticker} fill="black" />;
-        });
-      })} */}
 
-        {Object.keys(releventData[0]).map((value) => {
+        {Object.keys(accountData[0]).map((value) => {
+          // remove validation on the server
           return (
             value !== "name" &&
             value !== "RANDOMZABO" &&
-            value !== "XYZ" && <Bar dataKey={value} fill={randomColor()} />
+            value !== "XYZ" && (
+              <rechartBar dataKey={value} fill={randomColor()} />
+            )
           );
         })}
-        {/* <Bar dataKey="BTC" fill="RED" />;
-      <Bar dataKey="ETH" fill="BLACK" />; */}
-      </BarChart>
-      // </ResponsiveContainer>
+      </rechartBarChart>
     );
   }
 }
