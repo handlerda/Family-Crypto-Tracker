@@ -1,25 +1,25 @@
-import React, { useState } from "react";
-import { Link, NavLink, Redirect, useHistory } from "react-router-dom";
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
 import { useSelector } from "react-redux";
-import ProfileButton from "./ProfileButton";
-import LoginFormModal from "../LoginFormModal";
+
 import { Fragment } from "react";
 import { Disclosure, Menu, Transition } from "@headlessui/react";
-import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
+import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import { PlusIcon } from "@heroicons/react/solid";
 import { CogIcon } from "@heroicons/react/solid";
 import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
-
-//import Zabo from "zabo"
+import { addAccount, clearAccountStore } from "../../store/account";
 import Zabo from "zabo-sdk-js";
-import { addAccount } from "../../store/account";
+
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
 
+  // zabo helper function
   const zaboLogin = async () => {
+    // init the zabo object (pass in sandbox / prod based on context)
     const zabo = await Zabo.init({
       clientId: process.env.REACT_APP_ZABO_CLIENT_ID,
       env: "sandbox",
@@ -27,15 +27,15 @@ function Navigation({ isLoaded }) {
     return zabo.connect();
   };
 
+  // inject the zabo object on the screen
   const newZaboAccount = async () => {
     const zabo = await zaboLogin();
     // get account information
     zabo
       .onConnection((account) => {
         // handle successful connection
-        console.log("account connected:", account);
-        const newWallet = dispatch(addAccount(sessionUser.id, account));
-        console.log(newWallet);
+        // dispatch the account object to the backend
+        dispatch(addAccount(sessionUser.id, account));
       })
       .onError((error) => {
         // handle error
@@ -43,10 +43,12 @@ function Navigation({ isLoaded }) {
       });
   };
 
-  const logout = (e) => {
+  const logout = async (e) => {
+    // fixed
     e.preventDefault();
     dispatch(sessionActions.logout());
     history.push("/");
+    window.location.reload();
   };
 
   const loginDemoUser = async (e) => {
@@ -55,11 +57,6 @@ function Navigation({ isLoaded }) {
     history.push("/dashboard");
   };
 
-  const unauthenticatedNavigation = [
-    { name: "What we do", href: "#", current: false },
-    { name: "Why crypfam", href: "#", current: false },
-  ];
-
   //logout
 
   const unauthenticatedButtons = [
@@ -67,13 +64,6 @@ function Navigation({ isLoaded }) {
     { name: "Signup", href: "/sign-up", current: false },
   ];
 
-  //nav links for a logged in user
-  // const authenticatedNavigation = [
-  //   { name: "Family Dashboard", href: "/", current: false },
-  //   { name: "My Dashboard", href: "/", current: false },
-  //   { name: "Transactions", href: "", current: false },
-  //   { name: "Balances", href: "/", current: false },
-  // ];
   //user settings for a logged in user
   const userNavigation = [
     { name: "Settings", href: "settings" },
@@ -83,10 +73,6 @@ function Navigation({ isLoaded }) {
   function classNames(...classes) {
     return classes.filter(Boolean).join(" ");
   }
-
-  // sessionUser
-  console.log(`where is my navbar`);
-
   return (
     isLoaded && (
       <Disclosure as="nav" className="bg-purple-600">
@@ -231,7 +217,6 @@ function Navigation({ isLoaded }) {
                 </div>
               </div>
             </div>
-            {/* {showZabo && } */}
             <Disclosure.Panel className="md:hidden">
               {sessionUser && (
                 <div className="pt-4 pb-3 border-t border-gray-700">

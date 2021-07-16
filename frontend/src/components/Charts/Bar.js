@@ -1,23 +1,22 @@
-import React, { PureComponent } from "react";
+import React from "react";
 import { useSelector } from "react-redux";
 import {
   BarChart,
   Bar,
-  Cell,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
   Legend,
-  ResponsiveContainer,
 } from "recharts";
 import randomColor from "randomcolor";
 
 function BarChar() {
+  // load accounts
   const accounts = useSelector((state) => state.account.all);
-  const colors = ["purple", "black"];
-  const releventData = Object.values(accounts).map((account) => {
-    //do work
+  // this should move to a custom hook
+  const accountData = Object.values(accounts).map((account) => {
+    // loop through each account boject
     const obj = {};
     //get name
     obj.name = account.provider.display_name;
@@ -25,49 +24,41 @@ function BarChar() {
     account.balances.forEach((balance) => {
       obj[balance.ticker] = balance.amount;
     });
-    // console.log(obj);
     return obj;
   });
 
-  console.log(releventData);
-  return (
-    // <ResponsiveContainer width="100%" height="100%">
-    <BarChart
-      width={500}
-      height={300}
-      data={releventData}
-      margin={{
-        top: 5,
-        right: 30,
-        left: 20,
-        bottom: 5,
-      }}
-    >
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="name" />
-      <YAxis />
-      <Tooltip />
-      <Legend />
-      {/* {Object.values(releventData[0]).map((data) => {
-        return Object.keys(data).map((ticker) => {
-          return ticker !== "name" && <Bar dataKey={ticker} fill="black" />;
-        });
-      })} */}
+  // if there are accounts render
+  if (Object.keys(accounts).length) {
+    // render the chart
+    return (
+      <BarChart
+        width={500}
+        height={300}
+        data={accountData}
+        margin={{
+          top: 5,
+          right: 30,
+          left: 20,
+          bottom: 5,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Legend />
 
-      {Object.keys(releventData[0]).map((value, index) => {
-        return (
-          value !== "name" &&
-          value !== "RANDOMZABO" &&
-          value !== "XYZ" && (
-            <Bar dataKey={value} fill={colors[Math.floor(Math.random() * 2)]} />
-          )
-        );
-      })}
-      {/* <Bar dataKey="BTC" fill="RED" />;
-      <Bar dataKey="ETH" fill="BLACK" />; */}
-    </BarChart>
-    // </ResponsiveContainer>
-  );
+        {Object.keys(accountData[0]).map((value) => {
+          // remove validation on the server
+          return (
+            value !== "name" &&
+            value !== "RANDOMZABO" &&
+            value !== "XYZ" && <Bar dataKey={value} fill={randomColor()} />
+          );
+        })}
+      </BarChart>
+    );
+  }
 }
 
 export default BarChar;

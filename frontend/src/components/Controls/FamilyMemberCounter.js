@@ -1,8 +1,9 @@
 import { MinusSmIcon } from "@heroicons/react/outline";
-import { CheckIcon, PlusSmIcon, UserAddIcon } from "@heroicons/react/solid";
+import { PlusSmIcon } from "@heroicons/react/solid";
 import React from "react";
 import { useAddFamilyMemberSignUp } from "../../context/AddFamilyMembers";
 
+// handle family addition / subtraction
 function FamilyMemberCounter({ label, handleAdd, handleSubtract }) {
   const { familyMembers } = useAddFamilyMemberSignUp();
   return (

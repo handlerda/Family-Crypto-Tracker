@@ -101,6 +101,11 @@ function Family() {
                       Delete
                     </button>
                   )}
+                <p className="text-gray-600 text-xs mt-2">
+                  If you can not delete a family member. Make sure you they are
+                  not linked to any accounts or the account owner. More
+                  sophisticated error handling is being build.
+                </p>
               </div>
             </li>
           ))}
