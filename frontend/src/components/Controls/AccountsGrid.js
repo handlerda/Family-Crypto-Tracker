@@ -14,7 +14,7 @@ function AccountsGrid() {
           <div className="w-full flex items-center justify-between p-6 space-x-6">
             <div className="flex-1 truncate ">
               <div className="flex items-center space-x-3">
-                <h3 className="text-gray-900 text-sm text-center font-medium truncate">
+                <h3 className="text-gray-900 text-sm text-center font-medium truncate capitalize">
                   {account.provider.display_name}
                 </h3>
               </div>

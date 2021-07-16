@@ -2,6 +2,7 @@ import React from "react";
 import { useSelector } from "react-redux";
 import ActionPanel from "../Controls/ActionPanel";
 
+// Handle no accounts.
 function NoAccounts() {
   const user = useSelector((state) => state.session.user);
   return (

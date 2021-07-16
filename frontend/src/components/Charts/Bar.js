@@ -1,8 +1,8 @@
 import React from "react";
 import { useSelector } from "react-redux";
 import {
-  BarChart as rechartBarChart,
-  Bar as rechartBar,
+  BarChart,
+  Bar,
   XAxis,
   YAxis,
   CartesianGrid,
@@ -31,7 +31,7 @@ function BarChar() {
   if (Object.keys(accounts).length) {
     // render the chart
     return (
-      <rechartBarChart
+      <BarChart
         width={500}
         height={300}
         data={accountData}
@@ -53,12 +53,10 @@ function BarChar() {
           return (
             value !== "name" &&
             value !== "RANDOMZABO" &&
-            value !== "XYZ" && (
-              <rechartBar dataKey={value} fill={randomColor()} />
-            )
+            value !== "XYZ" && <Bar dataKey={value} fill={randomColor()} />
           );
         })}
-      </rechartBarChart>
+      </BarChart>
     );
   }
 }

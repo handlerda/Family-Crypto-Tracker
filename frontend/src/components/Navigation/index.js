@@ -44,11 +44,11 @@ function Navigation({ isLoaded }) {
   };
 
   const logout = async (e) => {
-    // THIS NEEDS TO BE FIXED
+    // fixed
     e.preventDefault();
-    await dispatch(sessionActions.logout());
-    await dispatch(clearAccountStore());
+    dispatch(sessionActions.logout());
     history.push("/");
+    window.location.reload();
   };
 
   const loginDemoUser = async (e) => {
