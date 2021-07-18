@@ -10,6 +10,7 @@ import Dashboard from "./components/Dashboard";
 import Splash from "./components/Splash";
 import { get } from "js-cookie";
 import { getAccounts } from "./store/account";
+import Exchange from "./components/Exchange/Index";
 
 function App() {
   const dispatch = useDispatch();
@@ -51,6 +52,9 @@ function App() {
             </Route>
             <Route path="/settings" exact>
               <Settings />
+            </Route>
+            <Route path="/exchange/:exchange">
+              <Exchange />
             </Route>
           </Switch>
         </div>

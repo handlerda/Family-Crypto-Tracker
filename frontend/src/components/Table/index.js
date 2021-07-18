@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const headers = [
   "Account",
@@ -40,7 +41,9 @@ export default function Table() {
                         return (
                           <tr>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 capitalize">
-                              {account.provider.name}
+                              <Link to={`/exchange/${account.provider.name}`}>
+                                {account.provider.name}
+                              </Link>
                             </td>
                             <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                               {balance.ticker}

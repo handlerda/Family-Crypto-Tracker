@@ -85,7 +85,8 @@ router.post(
     console.log(req);
     try {
       const { zaboAccountObject } = req.body;
-      const { id, familyId, headOfHouseHold, firstName } = req.user.dataValues;
+      const { id, familyId, headOfHouseHold, firstName, lastName } =
+        req.user.dataValues;
       // initialize zabo object
 
       //create new account
@@ -110,7 +111,7 @@ router.post(
         await newAccount.addAuthorizedUser(headOfHouseHold);
       }
       //allow current user to be an active user
-      const users = [{ id }];
+      const users = [{ id, firstName, lastName }];
       const accounts = returnedAccounts(
         zaboAccountObject,
         id,
@@ -166,11 +167,15 @@ router.get(
           where: { accountId: account.id },
         });
         // loop over those users who can access
+        // need to include the user having issues here
         const users = usersWhoCanAccess.map((user) => {
+          console.log(`the users were called`);
           return {
             id: user.userId,
           };
         });
+
+        console.log(users);
 
         //structure object for json payload
         const userId = zaboAccount.User.id;
