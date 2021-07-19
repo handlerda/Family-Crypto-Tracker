@@ -3,6 +3,7 @@ const asyncHandler = require("express-async-handler");
 const { requireAuth, restoreUser } = require("../../../utils/auth");
 const { User, Account, AuthorizedAccountUser } = require("../../../db/models");
 const Zabo = require("zabo-sdk-js");
+const { Op } = require("sequelize");
 const router = express.Router();
 
 //standardize the account return payload
@@ -168,15 +169,22 @@ router.get(
         });
         // loop over those users who can access
         // need to include the user having issues here
-        const users = usersWhoCanAccess.map((user) => {
+        const userIds = usersWhoCanAccess.map((user) => {
           // call a sequelize query here to get users.
           // there may be a better way to do it
-          return {
-            id: user.userId,
-          };
+          return user.userId;
         });
 
-        console.log(users);
+        // THIS SHOULD NOT BE ANOTHER DATABASE CALL IMPROVE IMPROVE IMPROVE
+        const users = await User.findAll({
+          where: {
+            id: {
+              [Op.in]: userIds,
+            },
+          },
+        });
+
+        console.log(`here come the users`, users);
 
         //structure object for json payload
         const userId = zaboAccount.User.id;

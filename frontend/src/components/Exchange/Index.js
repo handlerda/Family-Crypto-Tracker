@@ -146,6 +146,12 @@ export default function Exchange() {
     })
   )[0];
 
+  //get family details
+  const familyMembers = useSelector(
+    (state) => state.session.familyMembers.users
+  );
+  console.log(familyMembers);
+
   useEffect(() => {
     if (account) {
       setAccountLoaded(true);
@@ -172,9 +178,6 @@ export default function Exchange() {
     });
     setWallets(updatedWallets);
   }
-
-  console.log(`wallet state`, wallets);
-
   return (
     accountLoaded && (
       <div className="min-h-screen bg-gray-100">
@@ -240,14 +243,21 @@ export default function Exchange() {
                         <dt className="text-sm font-medium text-gray-500">
                           Family access
                         </dt>
-                        {account.accessibleUsers.map((member) => {
-                          console.log(`here comes the member`, member);
-                          return (
-                            <dd className="mt-1 text-sm text-gray-900">
-                              {`${member.firstName} ${member.lastName}`}
-                            </dd>
-                          );
-                        })}
+                        {/* 
+                        {familyMembers.map((member) => {
+                          if (
+                            account.accessibleUsers.some(
+                              (user) => user.id === member.id
+                            )
+                          ) {
+                            return (
+                              <dd className="mt-1 text-sm text-gray-900">
+                                
+                                {member.id}
+                              </dd>
+                            );
+                          }
+                        })} */}
                       </div>
 
                       <div className="sm:col-span-2">
