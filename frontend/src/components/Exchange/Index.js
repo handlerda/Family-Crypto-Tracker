@@ -267,11 +267,8 @@ export default function Exchange() {
                                     {wallet.name}
                                   </span>
                                 </div>
-                                {console.log(
-                                  `here is my wallet doggie`,
-                                  wallet
-                                )}
-                                {wallet.hidden ? `No text` : wallet.number}
+
+                                {wallet.hidden ? `` : wallet.number}
                                 <div className="ml-4 flex-shrink-0">
                                   <button
                                     onClick={(e) =>

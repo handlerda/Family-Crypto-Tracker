@@ -169,7 +169,8 @@ router.get(
         // loop over those users who can access
         // need to include the user having issues here
         const users = usersWhoCanAccess.map((user) => {
-          console.log(`the users were called`);
+          // call a sequelize query here to get users.
+          // there may be a better way to do it
           return {
             id: user.userId,
           };
