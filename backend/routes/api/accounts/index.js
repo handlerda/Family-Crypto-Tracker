@@ -184,8 +184,6 @@ router.get(
           },
         });
 
-        console.log(`here come the users`, users);
-
         //structure object for json payload
         const userId = zaboAccount.User.id;
         const firstName = zaboAccount.User.firstName;

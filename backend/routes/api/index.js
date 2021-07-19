@@ -4,6 +4,7 @@ const sessionRouter = require("./session.js");
 const householdRouter = require("./households.js");
 const accountsRouter = require("./accounts");
 const usersRouter = require("./users.js");
+const transactionsRouter = require("./transactions");
 
 router.post("/test", function (req, res) {
   res.json({ requestBody: req.body });
@@ -15,7 +16,9 @@ router.use("/session", sessionRouter);
 router.use("/households", householdRouter);
 // user handles user related actions
 router.use("/users", usersRouter);
-// account handles most Zabo related actions
+// account handles most account related actions
 router.use("/accounts", accountsRouter);
+// transaction handles transaction related actions
+router.use("/transactions/", transactionsRouter);
 
 module.exports = router;
