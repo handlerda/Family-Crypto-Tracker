@@ -66,7 +66,7 @@ function Navigation({ isLoaded }) {
 
   //user settings for a logged in user
   const userNavigation = [
-    { name: "Settings", href: "settings" },
+    { name: "Settings", href: "/settings" },
     { name: "Sign out" },
   ];
 
