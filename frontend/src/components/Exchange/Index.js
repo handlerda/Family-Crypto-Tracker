@@ -34,6 +34,7 @@ import Account from "../Settings/Account";
 import { getTransactions } from "../../store/account";
 import Transactions from "../Table/Transactions";
 import Header from "../Controls/Header";
+import NewWallet from "./NewWallet";
 
 const user = {
   name: "Whitney Francis",
@@ -301,7 +302,9 @@ export default function Exchange() {
               {/* Comments*/}
               <section aria-labelledby="notes-title"></section>
             </div>
-            <h1>Side bar goes here</h1>
+            <div>
+              <NewWallet />
+            </div>
           </div>
           {/* <div className="">
             {transactionsLoaded && <Transactions accountId={account.id} />}
