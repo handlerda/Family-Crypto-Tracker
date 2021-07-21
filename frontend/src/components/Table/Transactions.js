@@ -13,17 +13,17 @@ const headers = [
 
 function Transactions({ accountId }) {
   const transactions = useSelector((state) => state.account.transaction);
+  console.log(transactions, `here come transactions`);
   const [transactionsLoaded, setTransactionsLoaded] = useState(false);
   const dispatch = useDispatch();
   useEffect(() => {
-    if (!transactions || !transactionsLoaded) {
+    if (transactions !== undefined || !transactionsLoaded) {
       dispatch(getTransactions(accountId));
       setTransactionsLoaded(true);
     }
   }, [transactionsLoaded, dispatch, transactions, accountId]);
 
-  console.log(`here come transactions`);
-  if (transactionsLoaded || transactions) {
+  if (transactionsLoaded || transactions !== undefined) {
     return (
       <div className="flex flex-col">
         <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">

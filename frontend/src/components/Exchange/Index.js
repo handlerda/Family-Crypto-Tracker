@@ -168,10 +168,13 @@ export default function Exchange() {
 
   useEffect(() => {
     if (!transactionsLoaded) {
-      dispatch(getTransactions(account.id));
-      setTransactionsLoaded(true);
+      (async () => {
+        dispatch(getTransactions(account.id)).then(() =>
+          setTransactionsLoaded(true)
+        );
+      })();
     }
-  }, [transactionsLoaded]);
+  }, [transactionsLoaded, account, dispatch]);
 
   function handleShowClick(e, id) {
     // loop through the array of wallets
@@ -317,7 +320,11 @@ export default function Exchange() {
           <div className="max-w-3xl mx-auto px-4 sm:px-6 md:flex md:items-center md:justify-between md:space-x-5 lg:max-w-7xl lg:px-6">
             <div className="flex-grow">
               <Header title="Transactions" />
-              {transactionsLoaded && <Transactions accountId={account.id} />}
+              {transactionsLoaded ? (
+                <Transactions accountId={account.id} />
+              ) : (
+                "loading"
+              )}
             </div>
           </div>
         </main>
