@@ -30,6 +30,20 @@ function Transactions({ accountId }) {
     return date.toLocaleString("en-US", { hour12: false });
   }
 
+  function parseFee(fees) {
+    let value = fees.reduce((a, b) => {
+      return a.amount + b.amount;
+    }, 0);
+
+    //handle undefined
+    if (typeof value === "string") {
+      value = value.split("undefined")[1];
+      return `${+value} $`;
+    } else {
+      return `${value} $`;
+    }
+  }
+
   return (
     <div className="flex flex-col">
       <div className="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -68,9 +82,7 @@ function Transactions({ accountId }) {
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                        {transaction.fees.reduce((a, b) => {
-                          return a.amount + b.amount;
-                        }, 0)}
+                        {parseFee(transaction.fees)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {
