@@ -39,20 +39,6 @@ function NewWallet() {
           </div>
         </div>
         <div>
-          <label
-            htmlFor="password"
-            className="block text-sm font-medium text-gray-700"
-          >
-            Account name
-          </label>
-          <div className="mt-1">
-            <input
-              id="account_id"
-              name="account_id"
-              type="text"
-              className="appearance-none block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-            />
-          </div>
           <div className="flex justify-between">
             <button className="inline-flex items-center px-4 mt-5 py-1 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-yellow-600 hover:bg-yellow-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
               Clear

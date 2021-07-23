@@ -70,7 +70,23 @@ function Transactions({ accountId }) {
                   return (
                     <tr>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 capitalize">
-                        {transaction.transaction_type}
+                        <span className="">
+                          {transaction.transaction_type === "trade" && (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">
+                              {transaction.transaction_type}
+                            </span>
+                          )}
+                          {transaction.transaction_type === "deposit" && (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">
+                              {transaction.transaction_type}
+                            </span>
+                          )}
+                          {transaction.transaction_type === "withdrawal" && (
+                            <span className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">
+                              {transaction.transaction_type}
+                            </span>
+                          )}
+                        </span>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                         {transaction.parts[0].provider_ticker}
