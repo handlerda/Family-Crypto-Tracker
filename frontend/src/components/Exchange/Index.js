@@ -57,20 +57,6 @@ export default function Exchange() {
     })
   )[0];
 
-  const transactions = useSelector((state) => state.account.transaction);
-
-  //get family details
-  const familyMembers = useSelector(
-    (state) => state.session.familyMembers.users
-  );
-
-  //handle if we should render
-  // useEffect(() => {
-  //   if (!account) {
-  //     <Redirect to="/" />;
-  //   }
-  // });
-
   useEffect(() => {
     if (account) {
       setAccountLoaded(true);

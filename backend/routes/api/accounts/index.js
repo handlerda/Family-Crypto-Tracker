@@ -314,4 +314,44 @@ router.patch(
   })
 );
 
+// account addresses
+// query params for address
+// tickers [btc, eth, ada] e.t.c
+router.get(
+  "/addresses/:account/",
+  restoreUser,
+  asyncHandler(async (req, res, next) => {
+    const zaboAccountId = req.params.account;
+    const tickers = req.query.tickers;
+    if (tickers) {
+      // split the ticker string as an array
+      tickers.split(",");
+    }
+    const account = await Account.findOne({
+      where: {
+        zaboId: zaboAccountId,
+      },
+      include: User,
+    });
+    const zabo = await Zabo.init({
+      apiKey: process.env.ZABO_PUBLIC_KEY,
+      secretKey: process.env.ZABO_PRIVATE_KEY,
+      env: "sandbox",
+    });
+    // const wallets = await zabo.transactions.getList({
+    //   userId: account.User.zaboId,
+    //   accountId: account.zaboId,
+    // });
+    const addresses = tickers.map(async (ticker) => {
+      return await zabo.users.getDepositAddresses({
+        userId: account.User.zaboId,
+        accountId: account.zaboId,
+        ticker: ticker,
+      });
+    });
+    console.log(addresses);
+    res.json(addresses);
+  })
+);
+
 module.exports = router;
