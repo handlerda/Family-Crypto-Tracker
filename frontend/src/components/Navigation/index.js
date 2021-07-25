@@ -11,21 +11,20 @@ import { useDispatch } from "react-redux";
 import * as sessionActions from "../../store/session";
 import { addAccount, clearAccountStore } from "../../store/account";
 import Zabo from "zabo-sdk-js";
+// zabo helper function
+export const zaboLogin = async () => {
+  // init the zabo object (pass in sandbox / prod based on context)
+  const zabo = await Zabo.init({
+    clientId: process.env.REACT_APP_ZABO_CLIENT_ID,
+    env: "sandbox",
+  });
+  return zabo.connect();
+};
 
 function Navigation({ isLoaded }) {
   const dispatch = useDispatch();
   const history = useHistory();
   const sessionUser = useSelector((state) => state.session.user);
-
-  // zabo helper function
-  const zaboLogin = async () => {
-    // init the zabo object (pass in sandbox / prod based on context)
-    const zabo = await Zabo.init({
-      clientId: process.env.REACT_APP_ZABO_CLIENT_ID,
-      env: "sandbox",
-    });
-    return zabo.connect();
-  };
 
   // inject the zabo object on the screen
   const newZaboAccount = async () => {

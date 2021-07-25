@@ -16,12 +16,7 @@ router.get(
       where: {
         zaboId: zaboAccountId,
       },
-    });
-    // get user associated with account
-    const user = await User.findOne({
-      where: {
-        id: account.userId,
-      },
+      include: User,
     });
     const zabo = await Zabo.init({
       apiKey: process.env.ZABO_PUBLIC_KEY,
@@ -29,8 +24,8 @@ router.get(
       env: "sandbox",
     });
     const transactions = await zabo.transactions.getList({
-      userId: user.zaboId,
-      accountId: zaboAccountId,
+      userId: account.User.zaboId,
+      accountId: account.zaboId,
     });
     res.json(transactions);
   })
