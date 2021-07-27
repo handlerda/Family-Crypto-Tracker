@@ -16,6 +16,7 @@
 */
 import { Fragment, useEffect, useState } from "react";
 import { Menu, Popover, Transition } from "@headlessui/react";
+import Zabo from "zabo-sdk-js";
 import {
   ArrowNarrowLeftIcon,
   CashIcon,
@@ -56,6 +57,8 @@ export default function Exchange() {
       return account.provider.name === name;
     })
   )[0];
+
+  // handle wallet addresses
 
   useEffect(() => {
     if (account) {
