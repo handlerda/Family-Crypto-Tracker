@@ -18,12 +18,14 @@ function returnedAccounts(
   firstName,
   users = null,
   crypfamId,
+  walletAddresses,
   balances
 ) {
   zaboAccountObj.userId = userId;
   zaboAccountObj.firstName = firstName;
   zaboAccountObj.accessibleUsers = users;
   zaboAccountObj.crypfamId = crypfamId;
+  zaboAccountObj.walletAddresses = walletAddresses;
   zaboAccountObj.balances = balances;
 
   return zaboAccountObj;
@@ -163,6 +165,30 @@ router.get(
           accountId: zaboAccount.zaboId,
         });
 
+        // const zaboAccountAddress = await zabo.accounts.getDepositAddresses()
+        // blockchains where we need to get the address
+        const blockchains = zaboAccountPayload.balances.map((balance) => {
+          return balance.ticker;
+        });
+
+        //init var for wallet address
+        let walletAddresses;
+        try {
+          walletAddresses = blockchains.map(async (wallet) => {
+            if (wallet !== "XYZ" && wallet !== "RANDOMZABO") {
+              const walletData = await zabo.users.getDepositAddresses({
+                userId: zaboAccount.User.zaboId,
+                accountId: zaboAccount.zaboId,
+                ticker: wallet,
+              });
+              console.log(walletData);
+              return walletData.data;
+            }
+          });
+        } catch (error) {
+          console.log(error);
+        }
+        console.log(walletAddresses);
         // get a list of users who can access
         const usersWhoCanAccess = await AuthorizedAccountUser.findAll({
           where: { accountId: account.id },
@@ -193,11 +219,13 @@ router.get(
           firstName,
           users,
           account.id,
+          walletAddresses,
           filterBalance(zaboAccountPayload)
         );
         return accountPayload;
       })
     );
+    console.log(accounts);
 
     res.json({
       accounts: accounts,
