@@ -171,10 +171,8 @@ router.get(
           return balance.ticker;
         });
 
-        //init var for wallet address
-        let walletAddresses;
-        try {
-          walletAddresses = blockchains.map(async (wallet) => {
+        const walletAddresses = await Promise.all(
+          blockchains.map(async (wallet) => {
             if (wallet !== "XYZ" && wallet !== "RANDOMZABO") {
               const walletData = await zabo.users.getDepositAddresses({
                 userId: zaboAccount.User.zaboId,
@@ -182,12 +180,11 @@ router.get(
                 ticker: wallet,
               });
               console.log(walletData);
-              return walletData.data;
+              return walletData;
             }
-          });
-        } catch (error) {
-          console.log(error);
-        }
+          })
+        );
+
         console.log(walletAddresses);
         // get a list of users who can access
         const usersWhoCanAccess = await AuthorizedAccountUser.findAll({
