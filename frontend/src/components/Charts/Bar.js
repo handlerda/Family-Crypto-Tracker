@@ -14,9 +14,11 @@ import randomColor from "randomcolor";
 function BarChar() {
   // load accounts
   const accounts = useSelector((state) => state.account.all);
+  console.log(`here come the accounts`, accounts);
   // this should move to a custom hook
   const accountData = Object.values(accounts).map((account) => {
     // loop through each account boject
+    console.log(`here comes the account`, account);
     const obj = {};
     //get name
     obj.name = account.provider.display_name;

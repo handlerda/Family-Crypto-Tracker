@@ -28,6 +28,7 @@ function Dashboard() {
   useEffect(() => {
     dispatch(getFamilyMembers());
   }, [dispatch]);
+  console.log(accountsPresent);
   return (
     loadDashboard && (
       <div className="bg-gray-100 relative h-full">

@@ -25,7 +25,7 @@ function returnedAccounts(
   zaboAccountObj.firstName = firstName;
   zaboAccountObj.accessibleUsers = users;
   zaboAccountObj.crypfamId = crypfamId;
-  zaboAccountObj.walletAddresses = walletAddresses;
+  if (walletAddresses) zaboAccountObj.walletAddresses = walletAddresses;
   zaboAccountObj.balances = balances;
 
   return zaboAccountObj;
@@ -121,9 +121,11 @@ router.post(
         firstName,
         users,
         newAccount.id,
+        // balances are undefined // THIS NEEDS TO BE FIXED
+        null,
         filterBalance(zaboAccountObject)
       );
-
+      console.log(`here come the balances`, accounts);
       res.status = 201;
       res.json({
         ...accounts,
