@@ -32,7 +32,7 @@ import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { Redirect, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Account from "../Settings/Account";
-import { getTransactions } from "../../store/account";
+import { getDepositAddresses, getTransactions } from "../../store/account";
 import Transactions from "../Table/Transactions";
 import Header from "../Controls/Header";
 import NewWallet from "./NewWallet";
@@ -50,6 +50,7 @@ export default function Exchange() {
   // get exchange name
   const { exchange: name } = useParams();
   const [accountLoaded, setAccountLoaded] = useState(false);
+  const [walletAddressesLoaded, setWalletAddressesLoaded] = useState(false);
 
   // get account details
   const account = useSelector((state) =>
@@ -79,6 +80,23 @@ export default function Exchange() {
       })();
     }
   }, [transactionsLoaded, account, dispatch]);
+
+  useEffect(() => {
+    if (account?.balances.length) {
+      (async () => {
+        const wallets = account.balances
+          .map((wallet) => wallet.ticker)
+          .toString();
+        dispatch(getDepositAddresses(account.id, wallets))
+          .then(() => {
+            setWalletAddressesLoaded(true);
+          })
+          .then(() => {
+            console.log(`this loaded yay`);
+          });
+      })();
+    }
+  }, [dispatch, walletAddressesLoaded, account]);
 
   function handleShowClick(e, id) {
     // loop through the array of wallets

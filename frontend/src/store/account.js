@@ -11,6 +11,7 @@ const MODIFY_ACCOUNT = "wallet/modifyAccounts";
 const REMOVE_ACCOUNT = "wallet/removeAccount";
 const CLEAR_ACCOUNT_STORE = "wallet/clearAccounts";
 const GET_TRANSACTIONS = "wallet/Transactions";
+const GET_DEPOSIT_ADDRESSES = "wallet/DepositAddresses";
 const thunk = (type, payload) => {
   return {
     type,
@@ -96,6 +97,16 @@ export const clearAccountStore = () => async (dispatch) => {
   return null;
 };
 
+export const getDepositAddresses = (account, ticker) => async (dispatch) => {
+  const response = await csrfFetch(
+    `/api/accounts/addresses/${account}/tickers/${ticker}`
+  );
+  const data = await response.json();
+  console.log(`here comes data`, data);
+  dispatch(thunk(GET_DEPOSIT_ADDRESSES, data));
+  return data;
+};
+
 const initialState = { wallet: null, all: {} };
 
 const accountReducer = (state = initialState, action) => {
@@ -133,6 +144,10 @@ const accountReducer = (state = initialState, action) => {
     case GET_TRANSACTIONS:
       newState = Object.assign({}, state);
       newState.transaction = action.payload;
+      return newState;
+    case GET_DEPOSIT_ADDRESSES:
+      newState = Object.assign({}, state);
+      newState.addresses = action.payload;
       return newState;
     default:
       return state;

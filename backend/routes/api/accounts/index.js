@@ -125,7 +125,7 @@ router.post(
         null,
         filterBalance(zaboAccountObject)
       );
-      console.log(`here come the balances`, accounts);
+
       res.status = 201;
       res.json({
         ...accounts,
@@ -181,13 +181,12 @@ router.get(
                 accountId: zaboAccount.zaboId,
                 ticker: wallet,
               });
-              console.log(walletData);
+
               return walletData;
             }
           })
         );
 
-        console.log(walletAddresses);
         // get a list of users who can access
         const usersWhoCanAccess = await AuthorizedAccountUser.findAll({
           where: { accountId: account.id },
@@ -224,7 +223,6 @@ router.get(
         return accountPayload;
       })
     );
-    console.log(accounts);
 
     res.json({
       accounts: accounts,
@@ -345,15 +343,17 @@ router.patch(
 // query params for address
 // tickers [btc, eth, ada] e.t.c
 router.get(
-  "/addresses/:account/",
+  "/addresses/:account/tickers/:tickers",
   restoreUser,
   asyncHandler(async (req, res, next) => {
     const zaboAccountId = req.params.account;
-    const tickers = req.query.tickers;
+    let tickers = req.params.tickers;
     if (tickers) {
       // split the ticker string as an array
       tickers.split(",");
     }
+    //TICKER IS BROKEN
+    console.log(`here come tickers`, [tickers]);
     const account = await Account.findOne({
       where: {
         zaboId: zaboAccountId,
@@ -369,13 +369,14 @@ router.get(
     //   userId: account.User.zaboId,
     //   accountId: account.zaboId,
     // });
-    const addresses = tickers.map(async (ticker) => {
+    const addresses = [tickers].map(async (ticker) => {
       return await zabo.users.getDepositAddresses({
         userId: account.User.zaboId,
         accountId: account.zaboId,
         ticker: ticker,
       });
     });
+    console.log(`the addresses are en route`);
     console.log(addresses);
     res.json(addresses);
   })
