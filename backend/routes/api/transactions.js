@@ -27,6 +27,7 @@ router.get(
       userId: account.User.zaboId,
       accountId: account.zaboId,
     });
+    console.log(transactions);
     res.json(transactions);
   })
 );

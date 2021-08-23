@@ -87,6 +87,7 @@ export const deleteAccount = (accountId) => async (dispatch) => {
 export const getTransactions = (accountId) => async (dispatch) => {
   const response = await csrfFetch(`/api/transactions/account/${accountId}`);
   const data = await response.json();
+  console.log(`here comes data from transactions`, data);
   dispatch(thunk(GET_TRANSACTIONS, data));
   return data;
 };
@@ -97,15 +98,15 @@ export const clearAccountStore = () => async (dispatch) => {
   return null;
 };
 
-export const getDepositAddresses = (account, ticker) => async (dispatch) => {
-  const response = await csrfFetch(
-    `/api/accounts/addresses/${account}/tickers/${ticker}`
-  );
-  const data = await response.json();
-  console.log(`here comes data`, data);
-  dispatch(thunk(GET_DEPOSIT_ADDRESSES, data));
-  return data;
-};
+// export const getDepositAddresses = (account, ticker) => async (dispatch) => {
+//   const response = await csrfFetch(
+//     `/api/accounts/addresses/${account}/tickers/${ticker}`
+//   );
+//   const data = await response.json();
+//   console.log(`here comes data`, data);
+//   dispatch(thunk(GET_DEPOSIT_ADDRESSES, data));
+//   return data;
+// };
 
 const initialState = { wallet: null, all: {} };
 
@@ -143,6 +144,8 @@ const accountReducer = (state = initialState, action) => {
       return newState;
     case GET_TRANSACTIONS:
       newState = Object.assign({}, state);
+
+      console.log(`here comes the new state`, newState);
       newState.transaction = action.payload;
       return newState;
     case GET_DEPOSIT_ADDRESSES:

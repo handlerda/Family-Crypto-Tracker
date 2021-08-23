@@ -32,7 +32,7 @@ import { BellIcon, MenuIcon, XIcon } from "@heroicons/react/outline";
 import { Redirect, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import Account from "../Settings/Account";
-import { getDepositAddresses, getTransactions } from "../../store/account";
+import { getTransactions } from "../../store/account";
 import Transactions from "../Table/Transactions";
 import Header from "../Controls/Header";
 import NewWallet from "./NewWallet";
@@ -40,7 +40,7 @@ import NewWallet from "./NewWallet";
 //hard coded attachments
 const attachments = [
   { name: "Bitcoin", number: "12342343", id: 1, hidden: true, href: "#" },
-  { name: "Cardano ", number: "0453984352", id: 2, hidden: true, href: "#" },
+  { name: "Ethereum ", number: "0453984352", id: 2, hidden: true, href: "#" },
 ];
 
 export default function Exchange() {
@@ -81,22 +81,22 @@ export default function Exchange() {
     }
   }, [transactionsLoaded, account, dispatch]);
 
-  useEffect(() => {
-    if (account?.balances.length) {
-      (async () => {
-        const wallets = account.balances
-          .map((wallet) => wallet.ticker)
-          .toString();
-        dispatch(getDepositAddresses(account.id, wallets))
-          .then(() => {
-            setWalletAddressesLoaded(true);
-          })
-          .then(() => {
-            console.log(`this loaded yay`);
-          });
-      })();
-    }
-  }, [dispatch, walletAddressesLoaded, account]);
+  // useEffect(() => {
+  //   if (account?.balances.length) {
+  //     (async () => {
+  //       const wallets = account.balances
+  //         .map((wallet) => wallet.ticker)
+  //         .toString();
+  //       dispatch(getDepositAddresses(account.id, wallets))
+  //         .then(() => {
+  //           setWalletAddressesLoaded(true);
+  //         })
+  //         .then(() => {
+  //           console.log(`this loaded yay`);
+  //         });
+  //     })();
+  //   }
+  // }, [dispatch, walletAddressesLoaded, account]);
 
   function handleShowClick(e, id) {
     // loop through the array of wallets

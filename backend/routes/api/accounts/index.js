@@ -339,7 +339,6 @@ router.patch(
   })
 );
 
-
 // account addresses
 // query params for address
 // tickers [btc, eth, ada] e.t.c
